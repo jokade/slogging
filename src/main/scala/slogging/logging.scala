@@ -1,7 +1,7 @@
-//     Project: slibs / logging
-//      Author: Johannes Kastner
+//     Project: slogging
+//      Author: jokade <jkspam@karchedon.de>
 // Description: Defines mixins for logging
-package logging
+package slogging
 
 /**
  * Defines `logger` as a lazy value initialized with an [[UnderlyingLogger]]

@@ -1,7 +1,7 @@
-//     Project: slibs / logging
-//      Author: Johannes Kastner
+//     Project: slogging
+//      Author: jokade <jkspam@karchedon.de>
 // Description: ScalaJS logger implementation that redirects to the browser console
-package logging
+package slogging
 
 import scalajs.js.Dynamic.global
 

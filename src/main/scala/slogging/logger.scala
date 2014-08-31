@@ -1,7 +1,7 @@
-//     Project: slibs / logging
-//      Author: Johannes Kastner
+//     Project: slogging
+//      Author: jokade <jkspam@karchedon.de>
 // Description: Common interface and macro wrapper for LoggerS
-package logging
+package slogging
 
 import scala.language.experimental.macros
 

@@ -1,7 +1,7 @@
-//     Project: logging
-//      Author: Johannes Kastner
+//     Project: slogging
+//      Author: jokade <jkspam@karchedon.de>
 // Description: Provides implementations for Loggers and LoggerFactoryS
-package logging
+package slogging
 
 /**
  * Common interface for LoggerS (this interface is compatible to the slf4j logging API)
