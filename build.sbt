@@ -1,6 +1,6 @@
 name := "slogging"
 
-organization in ThisBuild := "biz.enef"
+organization in ThisBuild := "de.karchedon"
 
 version in ThisBuild := "0.1-SNAPSHOT"
 
