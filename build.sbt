@@ -19,3 +19,5 @@ lazy val js = project
 lazy val root = project.in( file(".") )
                 .aggregate(js,jvm)
                 .settings( publish := {} ) 
+
+publishTo in ThisBuild := Some( Resolver.ssh("repo", "karchedon.de", "/www/htdocs/w00be83c/maven.karchedon.de") as("ssh-w00be83c") )
