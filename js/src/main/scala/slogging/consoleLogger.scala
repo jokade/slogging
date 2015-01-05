@@ -1,15 +1,30 @@
-//     Project: slogging
-//      Author: jokade <jkspam@karchedon.de>
+// -   Project: slogging (https://github.com/jokade/slogging)
+//      Module: JS
 // Description: ScalaJS logger implementation that redirects to the browser console
+//
+// Copyright (c) 2015 Johannes Kastner <jkspam@karchedon.de>
+//               Distributed under the MIT License (see included file LICENSE)
 package slogging
 
 import scalajs.js.Dynamic.global
 
 object ConsoleLogger {
+  /**
+   * Logging level for all ConsoleLogger instances
+   */
   var level: LogLevel.Value = LogLevel.INFO
+
+  /**
+   * If true, all logger outputs are prefixed by the logger name
+   */
   var printLoggerName : Boolean = true
 }
 
+/**
+ * ScalaJS logger implementation that redirects to the browser console.
+ *
+ * @param name logger name
+ */
 class ConsoleLogger(name: String) extends UnderlyingLogger {
   val console = global.console
 

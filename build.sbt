@@ -1,20 +1,21 @@
-//      Project: slogging
-//       Author: jokade <jkspam@karchedon.de>
-//  Description: SBT build definition for the slogging library
 name := "slogging"
 
-organization := "biz.enef"
+organization in ThisBuild := "biz.enef"
 
-version in ThisBuild := "1.0"
+version in ThisBuild := "0.1-SNAPSHOT"
 
-scalaVersion in ThisBuild := "2.11.1"
+scalaVersion in ThisBuild := "2.11.4"
 
 scalacOptions ++= Seq("-deprecation","-feature","-Xlint")
 
 libraryDependencies in ThisBuild ++= Seq(
-  "org.scala-lang" % "scala-reflect" % "2.11.1"
+  "org.scala-lang" % "scala-reflect" % "2.11.4"
 )
+
+lazy val jvm = project
 
 lazy val js = project
 
-lazy val root = project.in( file(".") ).aggregate(js)
+lazy val root = project.in( file(".") )
+                .aggregate(js,jvm)
+                .settings( publish := {} ) 

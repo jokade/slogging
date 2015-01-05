@@ -1,8 +1,9 @@
 import ScalaJSKeys._
 
-name := "logging-js"
+name := "slogging-js"
 
 scalaJSSettings
 
-//scalaSource in Compile := baseDirectory.value / ".." / "src"
-unmanagedSourceDirectories in Compile += baseDirectory.value / ".." / "src"
+unmanagedSourceDirectories in Compile += baseDirectory.value / "shared" / "main" / "scala"
+
+publishTo := Some(Resolver.file("file", baseDirectory.value / ".." / "maven"  ))
