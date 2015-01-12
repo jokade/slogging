@@ -1,6 +1,6 @@
 name := "slogging"
 
-organization in ThisBuild := "de.karchedon"
+organization in ThisBuild := "biz.enef"
 
 version in ThisBuild := "0.1"
 
@@ -20,4 +20,4 @@ lazy val root = project.in( file(".") )
                 .aggregate(js,jvm)
                 .settings( publish := {} ) 
 
-publishTo in ThisBuild := Some( Resolver.sftp("repo", "karchedon.de", "/www/htdocs/w00be83c/maven.karchedon.de/") as("ssh-w00be83c") )
+publishTo in ThisBuild := Some( Resolver.sftp("repo", "karchedon.de", "/www/htdocs/w00be83c/maven.karchedon.de/") )
