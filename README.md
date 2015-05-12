@@ -11,12 +11,19 @@ Add one of the following lines to your `build.sbt` (depending on your target):
 
 **Scala/JVM** with logging to stdout:
 ```scala
-libraryDependencies += "biz.enef" %% "slogging" % "0.2"
+libraryDependencies += "biz.enef" %% "slogging" % "0.3-SNAPSHOT"
+```
+with slf4j:
+```scala
+libraryDependencies ++= Seq(
+  "biz.enef" %% "slogging-slf4j" % "0.3-SNAPSHOT",
+  "org.slf4j" % "slf4j-simple" % "1.7.+"  // or another slf4j implementation
+)
 ```
 
 **Scala.js** with logging to console:
 ```scala
-libraryDependencies += "biz.enef" %%% "slogging" % "0.2"
+libraryDependencies += "biz.enef" %%% "slogging" % "0.3-SNAPSHOT"
 ```
 
 slogging 0.2 is published for Scala 2.11.x and Scala.js 0.6.x.
@@ -49,7 +56,7 @@ class Foo extends LazyLogging {
 ### Activate logging and set log level
 The default logger is a `NullLogger` which simply ignores all logging statements. To activate logging output, assign a different logger factory to `LoggerConfig.factory`, or call the `apply()` method of the logger factory you want to use. Assign a new value to `LoggerConfig.level` to change the current log level. Example:
 ```scala
-import slogging.{PrintLoggerFactory, LoggerConfig, LogLevel}
+import slogging._
 
 object Main extends App {
   // activate simple logging using println (supported by Scala/JVM and Scala.js) 
@@ -57,6 +64,9 @@ object Main extends App {
   
   // - or, use console.log with Scala.js
   // ConsoleLoggerFactory()
+  
+  // - or, use SLF4J on JVM
+  // SLF4JLoggerFactory()
   
   // set log level to DEBUG
   LoggerConfig.level = LogLevel.DEBUG
