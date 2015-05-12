@@ -2,13 +2,13 @@ import SonatypeKeys._
 
 lazy val commonSettings = Seq(
   organization := "biz.enef",
-  version := "0.2",
+  version := "0.3-SNAPSHOT",
   scalaVersion := "2.11.6",
   scalacOptions ++= Seq("-deprecation","-unchecked","-feature","-Xlint")
 )
 
 lazy val root = project.in(file(".")).
-  aggregate(sloggingJVM,sloggingJS).
+  aggregate(sloggingJVM,sloggingJS,slf4j).
   settings(commonSettings:_*).
   settings(sonatypeSettings: _*).
   settings(
@@ -34,8 +34,16 @@ lazy val slogging = crossProject.in(file(".")).
   )
 
 lazy val sloggingJVM = slogging.jvm
-
 lazy val sloggingJS = slogging.js
+
+lazy val slf4j = project.
+  dependsOn(sloggingJVM).
+  settings(commonSettings:_*).
+  settings(publishingSettings:_*).
+  settings(
+    name := "slogging-slf4j",
+    libraryDependencies += "org.slf4j" % "slf4j-api" % "1.7.+"
+  )
 
 lazy val publishingSettings = Seq(
   publishMavenStyle := true,
