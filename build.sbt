@@ -1,6 +1,8 @@
+import SonatypeKeys._
+
 lazy val commonSettings = Seq(
   organization := "biz.enef",
-  version := "0.2-SNAPSHOT",
+  version := "0.2",
   scalaVersion := "2.11.6",
   scalacOptions ++= Seq("-deprecation","-unchecked","-feature","-Xlint")
 )
@@ -8,6 +10,7 @@ lazy val commonSettings = Seq(
 lazy val root = project.in(file(".")).
   aggregate(sloggingJVM,sloggingJS).
   settings(commonSettings:_*).
+  settings(sonatypeSettings: _*).
   settings(
     name := "slogging",
     publish := {},
@@ -15,13 +18,12 @@ lazy val root = project.in(file(".")).
   )
 
 lazy val slogging = crossProject.in(file(".")).
-  enablePlugins(ScalaJSPlugin).
   settings(commonSettings:_*).
   settings(publishingSettings:_*).
   settings(
     name := "slogging",
-    libraryDependencies in ThisBuild ++= Seq(
-      "org.scala-lang" % "scala-reflect" % "2.11.4"
+    libraryDependencies ++= Seq(
+      "org.scala-lang" % "scala-reflect" % "2.11.6"
     )
   ).
   jvmSettings(

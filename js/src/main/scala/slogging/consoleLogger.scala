@@ -33,11 +33,6 @@ class ConsoleLogger(name: String) extends UnderlyingLogger {
   def msg(level: String, msg: String, cause: Throwable) = s"${prefix(level)} $msg\n    $cause"
   def msg(level: String, msg: String, args: AnyRef*) = s"${prefix(level)} ${String.format(msg,args)}"
 
-  override def isErrorEnabled: Boolean = ConsoleLogger.level >= LogLevel.ERROR
-  override def isWarnEnabled: Boolean = ConsoleLogger.level >= LogLevel.WARN
-  override def isInfoEnabled: Boolean = ConsoleLogger.level >= LogLevel.INFO
-  override def isDebugEnabled: Boolean = ConsoleLogger.level >= LogLevel.DEBUG
-  override def isTraceEnabled: Boolean = ConsoleLogger.level >= LogLevel.TRACE
 
   override def error(message: String): Unit = console.error(msg("ERROR",message))
   override def error(message: String, cause: Throwable): Unit = console.error(msg("ERROR",message,cause))

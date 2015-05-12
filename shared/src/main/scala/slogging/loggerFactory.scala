@@ -11,11 +11,11 @@ package slogging
  */
 trait UnderlyingLogger {
 
-  def isErrorEnabled : Boolean
-  def isWarnEnabled : Boolean
-  def isInfoEnabled : Boolean
-  def isDebugEnabled : Boolean
-  def isTraceEnabled : Boolean
+  def isErrorEnabled: Boolean = LoggerConfig.level >= LogLevel.ERROR
+  def isWarnEnabled: Boolean = LoggerConfig.level >= LogLevel.WARN
+  def isInfoEnabled: Boolean = LoggerConfig.level >= LogLevel.INFO
+  def isDebugEnabled: Boolean = LoggerConfig.level >= LogLevel.DEBUG
+  def isTraceEnabled: Boolean = LoggerConfig.level >= LogLevel.TRACE
 
   // Error
 
@@ -101,7 +101,6 @@ object LogLevel extends Enumeration {
 }
 
 object PrintLogger {
-  var level: LogLevel.Value = LogLevel.INFO
   var printLoggerName : Boolean = true
 }
 
@@ -110,12 +109,6 @@ class PrintLogger(name: String) extends UnderlyingLogger {
   def msg(level: String, msg: String) = println(s"${prefix(level)} $msg")
   def msg(level: String, msg: String, cause: Throwable) = println(s"${prefix(level)} $msg\n    $cause")
   def msg(level: String, msg: String, args: AnyRef*) = println(s"${prefix(level)} ${String.format(msg,args)}")
-
-  override def isErrorEnabled: Boolean = PrintLogger.level >= LogLevel.ERROR
-  override def isWarnEnabled: Boolean = PrintLogger.level >= LogLevel.WARN
-  override def isInfoEnabled: Boolean = PrintLogger.level >= LogLevel.INFO
-  override def isDebugEnabled: Boolean = PrintLogger.level >= LogLevel.DEBUG
-  override def isTraceEnabled: Boolean = PrintLogger.level >= LogLevel.TRACE
 
   override def error(message: String): Unit = msg("ERROR",message)
   override def error(message: String, cause: Throwable): Unit = msg("ERROR",message,cause)
@@ -138,18 +131,25 @@ class PrintLogger(name: String) extends UnderlyingLogger {
   override def trace(message: String, args: AnyRef*): Unit = msg("TRACE",message,args)
 }
 
+
 object PrintLoggerFactory extends UnderlyingLoggerFactory {
   override def getUnderlyingLogger(name: String): UnderlyingLogger = new PrintLogger(name)
 }
 
 trait UnderlyingLoggerFactory {
   def getUnderlyingLogger(name: String) : UnderlyingLogger
+
+  final def apply() : UnderlyingLoggerFactory = {
+    LoggerConfig.factory = this
+    this
+  }
 }
 
 object LoggerFactory {
-  var factory : UnderlyingLoggerFactory = NullLoggerFactory
-  //var factory : UnderlyingLoggerFactory = PrintLoggerFactory
-
-  def getLogger(name: String) : Logger = Logger( factory.getUnderlyingLogger(name) )
+  def getLogger(name: String) : Logger = Logger( LoggerConfig.factory.getUnderlyingLogger(name) )
 }
 
+object LoggerConfig {
+  var factory : UnderlyingLoggerFactory = NullLoggerFactory
+  var level : LogLevel.Value = LogLevel.WARN
+}
