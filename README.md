@@ -1,7 +1,7 @@
 slogging
 ========
 
-A simple logging library for Scala and Scala.js. Slogging is compatible to [scala-logging](https://github.com/typesafehub/scala-logging) (and hence slf4j) and uses macros to check if logging statements should be executed.
+A simple logging library for Scala and Scala.js. Slogging is compatible to the [scala-logging](https://github.com/typesafehub/scala-logging) (and slf4j) API, and uses macros to check if logging statements should be executed.
 
 Getting Started
 ---------------
@@ -47,16 +47,19 @@ class Foo extends LazyLogging {
 ```
 
 ### Activate logging and set log level
-The default logger is a `NullLogger` which simply ignores all logging statements. To activate logging output, assign a different logger factory to `LoggerFactory.current`, or call the `apply()` method of the logger factory you want to use. Assign a new value to `LogLevel.current` to change the current log level. Example:
+The default logger is a `NullLogger` which simply ignores all logging statements. To activate logging output, assign a different logger factory to `LoggerConfig.factory`, or call the `apply()` method of the logger factory you want to use. Assign a new value to `LoggerConfig.level` to change the current log level. Example:
 ```scala
-import slogging.{PrintLoggerFactory, LogLevel}
+import slogging.{PrintLoggerFactory, LoggerConfig, LogLevel}
 
 object Main extends App {
-  // activate simple logging using println
+  // activate simple logging using println (supported by Scala/JVM and Scala.js) 
   PrintLoggerFactory()
   
+  // - or, use console.log with Scala.js
+  // ConsoleLoggerFactory()
+  
   // set log level to DEBUG
-  LogLevel.current = LogLevel.DEBUG
+  LoggerConfig.level = LogLevel.DEBUG
 }
 ```
 
