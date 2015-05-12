@@ -1,7 +1,7 @@
 slogging
 ========
 
-A simple logging library for Scala and Scala.js. Slogging is compatible to the [scala-logging](https://github.com/typesafehub/scala-logging) (and slf4j) API, and uses macros to check if logging statements should be executed.
+A simple logging library for Scala and [Scala.js](http://www.scala-js.org). Slogging is compatible to the [scala-logging](https://github.com/typesafehub/scala-logging) (and slf4j) API, and uses macros to check if logging statements should be executed.
 
 Getting Started
 ---------------
@@ -20,6 +20,11 @@ libraryDependencies += "biz.enef" %%% "slogging" % "0.2"
 ```
 
 slogging 0.2 is published for Scala 2.11.x and Scala.js 0.6.x.
+
+If you want to test the latest snapshot, change the version to 0.3-SNAPSHOT and add the Sonatype snapshots repository to your build.sbt:
+```scala
+resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+```
 
 ### Add logging statements
 Mix one of two traits into your class/object to give it logging capability:
