@@ -25,8 +25,12 @@ libraryDependencies ++= Seq(
 ```scala
 libraryDependencies += "biz.enef" %%% "slogging" % "0.3-SNAPSHOT"
 ```
+with [winston](https://www.npmjs.com/package/winston) (Node.js):
+```scala
+libraryDependencies += "biz.enef" %%% "slogging-winston" % "0.3-SNAPSHOT"
+```
 
-slogging 0.2 is published for Scala 2.11.x and Scala.js 0.6.x.
+slogging 0.3-SNAPSHOT is published for Scala 2.11.x and Scala.js 0.6.x.
 
 ### Add logging statements
 Mix one of two traits into your class/object to give it logging capability:
@@ -61,12 +65,15 @@ import slogging._
 object Main extends App {
   // activate simple logging using println (supported by Scala/JVM and Scala.js) 
   PrintLoggerFactory()
+
+  // - or, use SLF4J on JVM
+  // SLF4JLoggerFactory()
   
   // - or, use console.log with Scala.js
   // ConsoleLoggerFactory()
   
-  // - or, use SLF4J on JVM
-  // SLF4JLoggerFactory()
+  // - or with winston / Node.js
+  // WinstonLoggerFactory()
   
   // set log level to DEBUG
   LoggerConfig.level = LogLevel.DEBUG
