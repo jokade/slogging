@@ -45,6 +45,15 @@ lazy val slf4j = project.
     libraryDependencies += "org.slf4j" % "slf4j-api" % "1.7.+"
   )
 
+lazy val winston = project.
+  dependsOn(sloggingJS).
+  enablePlugins(ScalaJSPlugin).
+  settings(commonSettings:_*).
+  settings(publishingSettings:_*).
+  settings(
+    name := "slogging-winston"
+  )
+
 lazy val publishingSettings = Seq(
   publishMavenStyle := true,
   publishTo := {

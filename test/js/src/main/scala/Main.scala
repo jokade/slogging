@@ -4,9 +4,10 @@ import slogging._
 object Main extends js.JSApp {
   def main(): Unit = {
     val tests = Seq(
-      new LazyLoggingTest(NullLoggerFactory),
-      new LazyLoggingTest(PrintLoggerFactory),
-      new LazyLoggingTest(ConsoleLoggerFactory)
+      //new LazyLoggingTest(NullLoggerFactory),
+      //new LazyLoggingTest(PrintLoggerFactory),
+      //new LazyLoggingTest(ConsoleLoggerFactory),
+      new LazyLoggingTest(WinstonLoggerFactory)
     )
 
     tests.foreach( _.run )

@@ -20,6 +20,7 @@ lazy val slogging = crossProject.in(file(".")).
     libraryDependencies ++= Seq(
       "biz.enef" %%% "slogging" % sloggingVersion,
       "biz.enef" %%  "slogging-slf4j" % sloggingVersion ,
+      "biz.enef" %%%  "slogging-winston" % sloggingVersion ,
       "org.slf4j" %  "slf4j-simple" % "1.7.+"
     )
   ).
