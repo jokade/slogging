@@ -1,23 +1,68 @@
-name := "slogging"
-
-organization in ThisBuild := "biz.enef"
-
-version in ThisBuild := "0.1"
-
-scalaVersion in ThisBuild := "2.11.4"
-
-scalacOptions ++= Seq("-deprecation","-feature","-Xlint")
-
-libraryDependencies in ThisBuild ++= Seq(
-  "org.scala-lang" % "scala-reflect" % "2.11.4"
+lazy val commonSettings = Seq(
+  organization := "biz.enef",
+  version := "0.2-SNAPSHOT",
+  scalaVersion := "2.11.6",
+  scalacOptions ++= Seq("-deprecation","-unchecked","-feature","-Xlint")
 )
 
-lazy val jvm = project
+lazy val root = project.in(file(".")).
+  aggregate(sloggingJVM,sloggingJS).
+  settings(commonSettings:_*).
+  settings(
+    name := "slogging",
+    publish := {},
+    publishLocal := {}
+  )
 
-lazy val js = project
+lazy val slogging = crossProject.in(file(".")).
+  enablePlugins(ScalaJSPlugin).
+  settings(commonSettings:_*).
+  settings(publishingSettings:_*).
+  settings(
+    name := "slogging",
+    libraryDependencies in ThisBuild ++= Seq(
+      "org.scala-lang" % "scala-reflect" % "2.11.4"
+    )
+  ).
+  jvmSettings(
+  ).
+  jsSettings(
+    //preLinkJSEnv := NodeJSEnv().value,
+    //postLinkJSEnv := NodeJSEnv().value
+  )
 
-lazy val root = project.in( file(".") )
-                .aggregate(js,jvm)
-                .settings( publish := {} ) 
+lazy val sloggingJVM = slogging.jvm
 
-publishTo in ThisBuild := Some( Resolver.sftp("repo", "karchedon.de", "/www/htdocs/w00be83c/maven.karchedon.de/") )
+lazy val sloggingJS = slogging.js
+
+lazy val publishingSettings = Seq(
+  publishMavenStyle := true,
+  publishTo := {
+    val nexus = "https://oss.sonatype.org/"
+    if (isSnapshot.value)
+      Some("snapshots" at nexus + "content/repositories/snapshots")
+    else
+      Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+  },
+  pomExtra := (
+    <url>https://github.com/jokade/slogging</url>
+    <licenses>
+      <license>
+        <name>MIT License</name>
+        <url>http://www.opensource.org/licenses/mit-license.php</url>
+      </license>
+    </licenses>
+    <scm>
+      <url>git@github.com:jokade/slogging</url>
+      <connection>scm:git:git@github.com:jokade/slogging.git</connection>
+    </scm>
+    <developers>
+      <developer>
+        <id>jokade</id>
+        <name>Johannes Kastner</name>
+        <email>jokade@karchedon.de</email>
+      </developer>
+    </developers>
+  )
+)
+ 
