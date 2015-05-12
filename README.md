@@ -21,7 +21,7 @@ libraryDependencies += "biz.enef" %%% "slogging" % "0.2"
 
 slogging 0.2 is published for Scala 2.11.x and Scala.js 0.6.x.
 
-If you want to test the latest snapshot, change the version to 0.3-SNAPSHOT and add the Sonatype snapshots repository to your build.sbt:
+If you want to test the [latest snapshot](https://github.com/jokade/slogging/blob/v0.3/README.md), change the version to 0.3-SNAPSHOT and add the Sonatype snapshots repository to your build.sbt:
 ```scala
 resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 ```
