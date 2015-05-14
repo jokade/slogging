@@ -18,17 +18,21 @@ lazy val slogging = crossProject.in(file(".")).
     name := "slogging-test",
   resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
     libraryDependencies ++= Seq(
-      "biz.enef" %%% "slogging" % sloggingVersion,
-      "biz.enef" %%  "slogging-slf4j" % sloggingVersion ,
-      "biz.enef" %%%  "slogging-winston" % sloggingVersion ,
-      "org.slf4j" %  "slf4j-simple" % "1.7.+"
+      "biz.enef" %%% "slogging" % sloggingVersion
     )
   ).
   jvmSettings(
+    libraryDependencies ++= Seq(
+      "biz.enef" %%  "slogging-slf4j" % sloggingVersion,
+      "org.slf4j" %  "slf4j-simple" % "1.7.+"
+    )
   ).
   jsSettings(
     preLinkJSEnv := NodeJSEnv().value,
-    postLinkJSEnv := NodeJSEnv().value
+    postLinkJSEnv := NodeJSEnv().value,
+    libraryDependencies ++= Seq(
+      "biz.enef" %%%  "slogging-winston" % sloggingVersion
+    )
   )
 
 lazy val sloggingJVM = slogging.jvm

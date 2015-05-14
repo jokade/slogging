@@ -72,16 +72,16 @@ import slogging._
 
 object Main extends App {
   // activate simple logging using println (supported by Scala/JVM and Scala.js) 
-  PrintLoggerFactory()
+  LoggerConfig.factory = PrintLoggerFactory()
 
   // - or, use SLF4J on JVM
-  // SLF4JLoggerFactory()
+  // LoggerConfig.factory = SLF4JLoggerFactory()
   
   // - or, use console.log with Scala.js
-  // ConsoleLoggerFactory()
+  // LoggerConfig.factory = ConsoleLoggerFactory()
   
   // - or with winston / Node.js
-  // WinstonLoggerFactory()
+  // LoggerConfig.factory = WinstonLoggerFactory()
   
   // set log level to DEBUG
   LoggerConfig.level = LogLevel.DEBUG

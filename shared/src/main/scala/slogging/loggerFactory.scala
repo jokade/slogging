@@ -138,11 +138,7 @@ object PrintLoggerFactory extends UnderlyingLoggerFactory {
 
 trait UnderlyingLoggerFactory {
   def getUnderlyingLogger(name: String) : UnderlyingLogger
-
-  final def apply() : UnderlyingLoggerFactory = {
-    LoggerConfig.factory = this
-    this
-  }
+  def apply() : UnderlyingLoggerFactory = this
 }
 
 object LoggerFactory {
