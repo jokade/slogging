@@ -9,10 +9,10 @@ lazy val commonSettings = Seq(
 )
 
 lazy val root = project.in(file(".")).
-  aggregate(sloggingJVM,sloggingJS).
+  aggregate(testsJVM,testsJS).
   settings(commonSettings:_*)
 
-lazy val slogging = crossProject.in(file(".")).
+lazy val tests = crossProject.in(file(".")).
   settings(commonSettings:_*).
   settings(
     name := "slogging-test",
@@ -35,7 +35,7 @@ lazy val slogging = crossProject.in(file(".")).
     )
   )
 
-lazy val sloggingJVM = slogging.jvm
-lazy val sloggingJS = slogging.js
+lazy val testsJVM = tests.jvm
+lazy val testsJS = tests.js
 
 

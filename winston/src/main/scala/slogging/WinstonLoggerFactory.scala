@@ -4,24 +4,32 @@
 // Distributed under the MIT License (see included file LICENSE)
 package slogging
 
+import slogging.WinstonLoggerFactory.WinstonLogger
+
 import scalajs.js
 import js.Dynamic
 
-object WinstonLoggerFactory extends UnderlyingLoggerFactory {
-  override def getUnderlyingLogger(name: String): UnderlyingLogger = new WinstonLogger(name,_logger)
+object WinstonLoggerFactory {
+  val winston = Dynamic.global.require("winston")
+  private lazy val _default = new WinstonLoggerFactory(WinstonLogger())
 
-  private val _winston = Dynamic.global.require("winston")
-  private lazy val _logger = WinstonLoggerJS()
+  def apply() : UnderlyingLoggerFactory = _default
+  def apply(wlogger: WinstonLogger) : UnderlyingLoggerFactory = new WinstonLoggerFactory(wlogger)
 
-  trait WinstonLoggerJS extends js.Object {
+  trait WinstonLogger extends js.Object {
     def log(level: String, msg: String): Unit = js.native
   }
-  object WinstonLoggerJS {
-    def apply() : WinstonLoggerJS = _winston.asInstanceOf[WinstonLoggerJS]
+  object WinstonLogger {
+    def apply() : WinstonLogger = winston.asInstanceOf[WinstonLogger]
+    def apply(config: js.Dynamic) : WinstonLogger = js.Dynamic.newInstance(winston.Logger)(config).asInstanceOf[WinstonLogger]
   }
 
+}
 
-  class WinstonLogger(name: String, l: WinstonLoggerJS) extends UnderlyingLogger {
+class WinstonLoggerFactory(_logger: WinstonLogger) extends UnderlyingLoggerFactory {
+  override def getUnderlyingLogger(name: String): UnderlyingLogger = new WinstonLoggerImpl(name,_logger)
+
+  private class WinstonLoggerImpl(name: String, l: WinstonLogger) extends UnderlyingLogger {
     def prefix(level: String) = "" //if(ConsoleLogger.printLoggerName) s"[$level, $name]" else s"[$level]"
     def msg(level: String, msg: String) = s"${prefix(level)} $msg"
     def msg(level: String, msg: String, cause: Throwable) = s"${prefix(level)} $msg\n    $cause"
@@ -44,8 +52,8 @@ object WinstonLoggerFactory extends UnderlyingLoggerFactory {
     override def debug(message: String, cause: Throwable): Unit = l.log("debug",msg("DEBUG",message,cause))
     override def debug(message: String, args: AnyRef*): Unit = l.log("debug",msg("DEBUG",message,args))
 
-    override def trace(message: String): Unit = l.log("verbose",msg("TRACE",message))
-    override def trace(message: String, cause: Throwable): Unit = l.log("verbose",msg("TRACE",message,cause))
-    override def trace(message: String, args: AnyRef*): Unit = l.log("verbose",msg("TRACE",message,args))
+    override def trace(message: String): Unit = l.log("trace",msg("TRACE",message))
+    override def trace(message: String, cause: Throwable): Unit = l.log("trace",msg("TRACE",message,cause))
+    override def trace(message: String, args: AnyRef*): Unit = l.log("trace",msg("TRACE",message,args))
   }
 }

@@ -8,6 +8,14 @@ A simple logging library for Scala and Scala.js with various backends. Slogging 
   * [SBT Settings](#sbt-settings)
   * [Logging and Configuration](#logging-and-configuration)
 * [Backends](#backends)
+  * [Scala / JVM](#scala--jvm)
+    * [PrintLogger](#printloggerfactory)
+    * [SLF4J](#slf4jfactory)
+  * [Scala.js](#scalajs)
+    * [PrintLogger](#printloggerfactory-1)
+    * [ConsoleLogger](#consolelogger)
+    * [Winston (Node.js)](#winstonloggerfactory)
+    * [Remote HTTP](#remotehttploggerfactory)
 
 
 Getting Started
@@ -95,20 +103,104 @@ Backends
 ### Scala / JVM
 slogging supports the following logger backends on Scala (JVM):
 #### PrintLoggerFactory
-TBD
+A simple backend that prints all log messages to stdout.
+
+**Usage:**
+```scala
+// build.sbt
+libraryDependencies += "biz.enef" %% "slogging" % "VERSION"
+```
+```scala
+import slogging._
+
+// activate PrintLogger; no additional configuration required
+LoggerConfig.factory = PrintLoggerFactory()
+```
 
 #### SLF4JLoggerFactory
-TBD
+This backend is just a wrapper around [slf4j](http://www.slf4j.org).
+
+**Usage:**
+```scala
+// build.sbt
+libraryDependencies ++= Seq(
+  "biz.enef" %% "slogging-slf4j" % "VERSION",
+  "org.slf4j" % "slf4j-simple" % "1.7.+"  // or another slf4j implementation
+)
+```
+```scala
+import slogging._
+
+// activate SLF4J backend
+LoggerConfig.factory = SLF4JFactory()
+```
 
 ### Scala.js
 slogging support the following logger backends for Scala.js:
 #### PrintLoggerFactory
-See PrintLoggerFactory for Scala / JVM
+A simple backend that prints all log messages to the console unsing Scala's `println()`.
+
+**Usage:**
+```scala
+// build.sbt
+libraryDependencies += "biz.enef" %%% "slogging" % "VERSION"
+```
+```scala
+import slogging._
+
+// activate PrintLogger; no additional configuration required
+LoggerConfig.factory = PrintLoggerFactory()
+```
 
 #### ConsoleLoggerFactory
-TBD
+Similar to PrintLoggerFactory, but uses `console.log` instead of `println()`.
+
+**Usage:**
+```scala
+// build.sbt
+libraryDependencies += "biz.enef" %%% "slogging" % "VERSION"
+```
+```scala
+import slogging._
+
+// activate ConsoleLogger; no additional configuration required
+LoggerConfig.factory = ConsoleLoggerFactory()
+```
 
 #### WinstonLoggerFactory
+A wrapper around the [winston](https://www.npmjs.com/package/winston) logging library for Node.js.
+
+**Usage:**
+```scala
+// build.sbt
+libraryDependencies += "biz.enef" %%% "slogging-winston" % "VERSION"
+```
+```scala
+import slogging._
+
+// use default winston logger
+LoggerConfig.factory = WinstonLoggerFactory()
+
+// use a custom winston logger
+import WinstonLoggerFactory.{WinstonLogger, winston}
+
+LoggerConfig.factory = WinstonLoggerFactory(WinstonLogger(literal(
+  levels = js.Dictionary(
+    "trace" -> 0,
+    "debug" -> 1,
+    "info"  -> 2,
+    "warn"  -> 3,
+    "error" -> 4
+  ),
+  transports = js.Array(
+    js.Dynamic.newInstance(winston.transports.Console)(literal(
+      level = "debug"
+    ))
+  )
+)))
+```
+
+#### RemoteHttpLoggerFactory
 TBD
 
 License

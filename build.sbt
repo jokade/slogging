@@ -8,7 +8,7 @@ lazy val commonSettings = Seq(
 )
 
 lazy val root = project.in(file(".")).
-  aggregate(sloggingJVM,sloggingJS,slf4j).
+  aggregate(sloggingJVM,sloggingJS,slf4j,winston).
   settings(commonSettings:_*).
   settings(sonatypeSettings: _*).
   settings(
