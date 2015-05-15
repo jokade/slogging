@@ -7,7 +7,7 @@ trait LoggingTest extends Test {
   def factory: UnderlyingLoggerFactory
 
   final override def run() : Unit = {
-    factory()
+    LoggerConfig.factory = factory()
     println()
     println(s"===== $testName =====")
     Seq(LogLevel.OFF, LogLevel.ERROR, LogLevel.WARN, LogLevel.INFO, LogLevel.DEBUG, LogLevel.TRACE).foreach{ l =>

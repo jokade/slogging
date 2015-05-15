@@ -138,11 +138,7 @@ object PrintLoggerFactory extends UnderlyingLoggerFactory {
 
 trait UnderlyingLoggerFactory {
   def getUnderlyingLogger(name: String) : UnderlyingLogger
-
-  final def apply() : UnderlyingLoggerFactory = {
-    LoggerConfig.factory = this
-    this
-  }
+  def apply() : UnderlyingLoggerFactory = this
 }
 
 object LoggerFactory {
@@ -150,6 +146,10 @@ object LoggerFactory {
 }
 
 object LoggerConfig {
-  var factory : UnderlyingLoggerFactory = NullLoggerFactory
-  var level : LogLevel.Value = LogLevel.WARN
+  private var _factory : UnderlyingLoggerFactory = NullLoggerFactory
+  private var _level : LogLevel.Value = LogLevel.INFO
+  def factory = _factory
+  def factory_=(f: UnderlyingLoggerFactory) = this.synchronized{ _factory = f }
+  def level = _level
+  def level_=(l: LogLevel.Value) = this.synchronized{ _level = l }
 }
