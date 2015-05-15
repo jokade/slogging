@@ -1,4 +1,5 @@
 // -   Project: slogging (https://github.com/jokade/slogging)
+//      Module: jvm / slf4j
 // Description: SLF4 logging backend
 //
 // Distributed under the MIT License (see included file LICENSE)

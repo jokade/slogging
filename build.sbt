@@ -8,7 +8,7 @@ lazy val commonSettings = Seq(
 )
 
 lazy val root = project.in(file(".")).
-  aggregate(sloggingJVM,sloggingJS,slf4j,winston).
+  aggregate(sloggingJVM,sloggingJS,slf4j,winston,http).
   settings(commonSettings:_*).
   settings(sonatypeSettings: _*).
   settings(
@@ -53,6 +53,17 @@ lazy val winston = project.
   settings(
     name := "slogging-winston"
   )
+
+lazy val http = project.
+  dependsOn(sloggingJS).
+  enablePlugins(ScalaJSPlugin).
+  settings(commonSettings:_*).
+  settings(publishingSettings:_*).
+  settings(
+    name := "slogging-http",
+    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.8.0"
+  )
+
 
 lazy val publishingSettings = Seq(
   publishMavenStyle := true,

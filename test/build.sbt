@@ -31,7 +31,8 @@ lazy val tests = crossProject.in(file(".")).
     preLinkJSEnv := NodeJSEnv().value,
     postLinkJSEnv := NodeJSEnv().value,
     libraryDependencies ++= Seq(
-      "biz.enef" %%%  "slogging-winston" % sloggingVersion
+      "biz.enef" %%%  "slogging-winston" % sloggingVersion,
+      "biz.enef" %%%  "slogging-http" % sloggingVersion
     )
   )
 

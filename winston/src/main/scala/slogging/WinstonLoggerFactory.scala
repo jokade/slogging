@@ -1,4 +1,5 @@
 // -   Project: slogging (https://github.com/jokade/slogging)
+//      Module: js / winston
 // Description: Winston (Node.js) logging backend
 //
 // Distributed under the MIT License (see included file LICENSE)

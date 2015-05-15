@@ -25,10 +25,28 @@ object Main extends js.JSApp {
             literal(level = "trace")
           ))
       ))))
-      }
+      },
+      // http
+      httpLoggerTest()
     )
 
     tests.foreach( _.run )
 
+  }
+
+
+  private def httpLoggerTest() = {
+    js.Dynamic.global.XMLHttpRequest = () => {
+      var method: String = null
+      var url: String = null
+      val xhr = literal()
+      xhr.open = (m:String, u: String) => {
+        method = m
+        url = u
+      }
+      xhr.send = (data: String) => println(s"SENDING '$data' TO $url")
+      xhr
+    }
+    new LazyLoggingTest(HttpLoggerFactory("http://test.de", "clientId"))
   }
 }
