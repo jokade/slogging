@@ -10,12 +10,12 @@ A simple logging library for Scala and Scala.js with various backends. Slogging 
 * [Backends](#backends)
   * [Scala / JVM](#scala--jvm)
     * [PrintLogger](#printloggerfactory)
-    * [SLF4J](#slf4jfactory)
+    * [SLF4J](#slf4jloggerfactory)
   * [Scala.js](#scalajs)
     * [PrintLogger](#printloggerfactory-1)
-    * [ConsoleLogger](#consolelogger)
+    * [ConsoleLogger](#consoleloggerfactory)
     * [Winston (Node.js)](#winstonloggerfactory)
-    * [Remote HTTP](#remotehttploggerfactory)
+    * [Remote HTTP](#httploggerfactory)
 
 
 Getting Started
@@ -26,26 +26,30 @@ Add one of the following lines to your `build.sbt` (depending on your target):
 
 **Scala/JVM** with logging to stdout:
 ```scala
-libraryDependencies += "biz.enef" %% "slogging" % "0.3-SNAPSHOT"
+libraryDependencies += "biz.enef" %% "slogging" % "0.3"
 ```
 with slf4j:
 ```scala
 libraryDependencies ++= Seq(
-  "biz.enef" %% "slogging-slf4j" % "0.3-SNAPSHOT",
+  "biz.enef" %% "slogging-slf4j" % "0.3",
   "org.slf4j" % "slf4j-simple" % "1.7.+"  // or another slf4j implementation
 )
 ```
 
 **Scala.js** with logging to console:
 ```scala
-libraryDependencies += "biz.enef" %%% "slogging" % "0.3-SNAPSHOT"
+libraryDependencies += "biz.enef" %%% "slogging" % "0.3"
 ```
 with [winston](https://www.npmjs.com/package/winston) (Node.js):
 ```scala
-libraryDependencies += "biz.enef" %%% "slogging-winston" % "0.3-SNAPSHOT"
+libraryDependencies += "biz.enef" %%% "slogging-winston" % "0.3"
+```
+with remote logging via HTTP POST:
+```scala
+libraryDependencies += "biz.enef" %%% "slogging-http" % "0.3"
 ```
 
-slogging 0.3-SNAPSHOT is published for Scala 2.11.x and Scala.js 0.6.2+.
+slogging 0.3 is published for Scala 2.11.x and Scala.js 0.6.2+.
 
 ### Logging and Configuration
 #### Add logging statements
@@ -97,6 +101,11 @@ object Main extends App {
 ```
 **Note**: Some backends (slf4j, winston) have their own log level management, which needs to be adjusted as well.
 
+#### Disable logging at compile time
+It is possible to omit logging statements from the generated code altogether. To this end add the following flag to your `build.sbt`:
+```scala
+scalacOptions += "-Xmacro-settings:slogging.disable"
+```
 
 Backends
 --------
@@ -200,8 +209,28 @@ LoggerConfig.factory = WinstonLoggerFactory(WinstonLogger(literal(
 )))
 ```
 
-#### RemoteHttpLoggerFactory
-TBD
+#### HttpLoggerFactory
+This backend sends log messages to a HTTP server via Ajax POST requests. Note that the same origin policy usually requires that the server to which the messages are sent must be the same server from which the javascript source was loaded.
+
+**Usage:**
+```scala
+import slogging._
+
+// function that assembles the JSON object to be sent
+// (only required if you want to override the default formatter)
+val fmt: HttpLoggerFactory.MessageFormatter = (clientId,level,name,msg,cause) => js.Dynamic.literal(
+  id = clientId,
+  loggerName = name,
+  logMessage = msg
+)
+
+// configure & activate remote HTTP logging 
+LoggerConfig.factory = 
+  HttpLoggerFactory("/logging", // target URL for log messages
+                    "client1",  // ID of the client that sends the messages (optional)
+                    fmt         // message formatting function (optional)
+                   ) 
+```
 
 License
 -------
