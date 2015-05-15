@@ -16,10 +16,11 @@ lazy val tests = crossProject.in(file(".")).
   settings(commonSettings:_*).
   settings(
     name := "slogging-test",
-  resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
+    resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
     libraryDependencies ++= Seq(
       "biz.enef" %%% "slogging" % sloggingVersion
     )
+    //scalacOptions += "-Xmacro-settings:slogging.disable"
   ).
   jvmSettings(
     libraryDependencies ++= Seq(
