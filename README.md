@@ -1,7 +1,7 @@
 slogging
 ========
 
-A simple logging library for Scala and Scala.js with various backends. Slogging is compatible to the [scala-logging](https://github.com/typesafehub/scala-logging) (and slf4j) API, and uses macros to check if logging statements should be executed.
+A simple logging library for Scala and [Scala.js](http://www.scala-js.org). Slogging is compatible to the [scala-logging](https://github.com/typesafehub/scala-logging) (and slf4j) API, and uses macros to check if logging statements should be executed.
 
 **News:** Version 0.3 has been released ([release notes](https://github.com/jokade/slogging/wiki/Release-Notes))!
 
