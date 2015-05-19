@@ -1,4 +1,4 @@
-import SonatypeKeys._
+//import SonatypeKeys._
 
 lazy val commonSettings = Seq(
   organization := "biz.enef",
@@ -10,7 +10,7 @@ lazy val commonSettings = Seq(
 lazy val root = project.in(file(".")).
   aggregate(sloggingJVM,sloggingJS,slf4j,winston,http).
   settings(commonSettings:_*).
-  settings(sonatypeSettings: _*).
+  //settings(sonatypeSettings: _*).
   settings(
     name := "slogging",
     publish := {},
