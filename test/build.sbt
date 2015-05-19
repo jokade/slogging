@@ -1,4 +1,4 @@
-val sloggingVersion = "0.3-SNAPSHOT"
+val sloggingVersion = "0.3"
 
 lazy val commonSettings = Seq(
   scalaVersion := "2.11.6",
@@ -16,7 +16,7 @@ lazy val tests = crossProject.in(file(".")).
   settings(commonSettings:_*).
   settings(
     name := "slogging-test",
-    resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
+    //resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
     libraryDependencies ++= Seq(
       "biz.enef" %%% "slogging" % sloggingVersion
     )

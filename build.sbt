@@ -2,7 +2,7 @@ import SonatypeKeys._
 
 lazy val commonSettings = Seq(
   organization := "biz.enef",
-  version := "0.3",
+  version := "0.4-SNAPSHOT",
   scalaVersion := "2.11.6",
   scalacOptions ++= Seq("-deprecation","-unchecked","-feature","-Xlint")
 )
