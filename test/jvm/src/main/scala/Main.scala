@@ -4,7 +4,7 @@ object Main {
 
   def main(args: Array[String]) : Unit = {
     PrintLogger.printTimestamp = true
-    FilterLogger.filter = { case _ => PrintLogger }
+    FilterLogger.filter = { case _ => MultiLogger(PrintLogger,PrintLogger) }
     val tests = Seq(
       //new LazyLoggingTest(NullLoggerFactory),
       //new LazyLoggingTest(PrintLoggerFactory),
