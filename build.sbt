@@ -1,7 +1,7 @@
 
 lazy val commonSettings = Seq(
   organization := "biz.enef",
-  version := "0.4-SNAPSHOT",
+  version := "0.4.0",
   scalaVersion := "2.11.7",
   scalacOptions ++= Seq("-deprecation","-unchecked","-feature","-Xlint")
 )
