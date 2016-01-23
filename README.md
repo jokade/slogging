@@ -1,5 +1,6 @@
 slogging
 ========
+[![Build Status](https://travis-ci.org/jokade/slogging.svg?branch=v0.4)](https://travis-ci.org/jokade/slogging)
 
 A simple logging library for Scala and [Scala.js](http://www.scala-js.org). Slogging is compatible to the [scala-logging](https://github.com/typesafehub/scala-logging) (and slf4j) API, and uses macros to check if logging statements should be executed.
 
@@ -123,8 +124,11 @@ libraryDependencies += "biz.enef" %% "slogging" % "VERSION"
 ```scala
 import slogging._
 
-// activate PrintLogger; no additional configuration required
+// activate PrintLogger
 LoggerConfig.factory = PrintLoggerFactory()
+
+// set this to activate timestamp logging
+PrintLogger.printTimestamp = true
 ```
 
 #### SLF4JLoggerFactory

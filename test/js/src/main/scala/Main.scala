@@ -4,6 +4,7 @@ import js.Dynamic.literal
 
 object Main extends js.JSApp {
   def main(): Unit = {
+    PrintLogger.printTimestamp = true
     val tests = Seq(
       new LazyLoggingTest(NullLoggerFactory()),
       new LazyLoggingTest(PrintLoggerFactory()),

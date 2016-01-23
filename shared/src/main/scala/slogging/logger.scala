@@ -19,7 +19,7 @@ object Logger {
  *
  * @param underlying
  */
-final class Logger private (val underlying: UnderlyingLogger) {
+final class Logger private (val underlying: UnderlyingLogger) extends AnyVal {
 
   // Error
 
@@ -78,22 +78,22 @@ private class LoggerMacro(val c: Context) {
   def errorMessage(message: c.Expr[String]) : c.Tree = {
     val underlying = q"${c.prefix}.underlying"
     if(disabled) q"()" else
-    q"if ($underlying.isErrorEnabled) $underlying.error($message)"
+    q"if ($underlying.isErrorEnabled) $underlying.error(loggerName,$message)"
   }
 
   def errorMessageCause(message: c.Expr[String], cause: c.Expr[Throwable]) : c.Tree = {
     val underlying = q"${c.prefix}.underlying"
     if(disabled) q"()" else
-    q"if ($underlying.isErrorEnabled) $underlying.error($message, $cause)"
+    q"if ($underlying.isErrorEnabled) $underlying.error(loggerName,$message, $cause)"
   }
 
   def errorMessageArgs(message: c.Expr[String], args: c.Expr[AnyRef]*) : c.Tree = {
     val underlying = q"${c.prefix}.underlying"
     if(disabled) q"()"
     else if (args.length == 2)
-      q"if ($underlying.isErrorEnabled) $underlying.error($message, List(${args(0)}, ${args(1)}): _*)"
+      q"if ($underlying.isErrorEnabled) $underlying.error(loggerName,$message, List(${args(0)}, ${args(1)}): _*)"
     else
-      q"if ($underlying.isErrorEnabled) $underlying.error($message, ..$args)"
+      q"if ($underlying.isErrorEnabled) $underlying.error(loggerName,$message, ..$args)"
   }
 
   // Warn
@@ -101,22 +101,22 @@ private class LoggerMacro(val c: Context) {
   def warnMessage(message: c.Expr[String]) : c.Tree = {
     val underlying = q"${c.prefix}.underlying"
     if(disabled) q"()" else
-    q"if ($underlying.isWarnEnabled) $underlying.warn($message)"
+    q"if ($underlying.isWarnEnabled) $underlying.warn(loggerName,$message)"
   }
 
   def warnMessageCause(message: c.Expr[String], cause: c.Expr[Throwable]) : c.Tree = {
     val underlying = q"${c.prefix}.underlying"
     if(disabled) q"()" else
-    q"if ($underlying.isWarnEnabled) $underlying.warn($message, $cause)"
+    q"if ($underlying.isWarnEnabled) $underlying.warn(loggerName,$message, $cause)"
   }
 
   def warnMessageArgs(message: c.Expr[String], args: c.Expr[AnyRef]*) : c.Tree = {
     val underlying = q"${c.prefix}.underlying"
     if(disabled) q"()"
     else if (args.length == 2)
-      q"if ($underlying.isWarnEnabled) $underlying.warn($message, List(${args(0)}, ${args(1)}): _*)"
+      q"if ($underlying.isWarnEnabled) $underlying.warn(loggerName,$message, List(${args(0)}, ${args(1)}): _*)"
     else
-      q"if ($underlying.isWarnEnabled) $underlying.warn($message, ..$args)"
+      q"if ($underlying.isWarnEnabled) $underlying.warn(loggerName,$message, ..$args)"
   }
 
   // Info
@@ -124,22 +124,22 @@ private class LoggerMacro(val c: Context) {
   def infoMessage(message: c.Expr[String]) : c.Tree = {
     val underlying = q"${c.prefix}.underlying"
     if(disabled) q"()" else
-    q"if ($underlying.isInfoEnabled) $underlying.info($message)"
+    q"if ($underlying.isInfoEnabled) $underlying.info(loggerName,$message)"
   }
 
   def infoMessageCause(message: c.Expr[String], cause: c.Expr[Throwable]) : c.Tree = {
     val underlying = q"${c.prefix}.underlying"
     if(disabled) q"()" else
-    q"if ($underlying.isInfoEnabled) $underlying.info($message, $cause)"
+    q"if ($underlying.isInfoEnabled) $underlying.info(loggerName,$message, $cause)"
   }
 
   def infoMessageArgs(message: c.Expr[String], args: c.Expr[AnyRef]*) : c.Tree = {
     val underlying = q"${c.prefix}.underlying"
     if(disabled) q"()"
     else if (args.length == 2)
-      q"if ($underlying.isInfoEnabled) $underlying.info($message, List(${args(0)}, ${args(1)}): _*)"
+      q"if ($underlying.isInfoEnabled) $underlying.info(loggerName,$message, List(${args(0)}, ${args(1)}): _*)"
     else
-      q"if ($underlying.isInfoEnabled) $underlying.info($message, ..$args)"
+      q"if ($underlying.isInfoEnabled) $underlying.info(loggerName,$message, ..$args)"
   }
 
   // Debug
@@ -147,22 +147,22 @@ private class LoggerMacro(val c: Context) {
   def debugMessage(message: c.Expr[String]) : c.Tree = {
     val underlying = q"${c.prefix}.underlying"
     if(disabled) q"()" else
-    q"if ($underlying.isDebugEnabled) $underlying.debug($message)"
+    q"if ($underlying.isDebugEnabled) $underlying.debug(loggerName,$message)"
   }
 
   def debugMessageCause(message: c.Expr[String], cause: c.Expr[Throwable]) : c.Tree = {
     val underlying = q"${c.prefix}.underlying"
     if(disabled) q"()" else
-    q"if ($underlying.isDebugEnabled) $underlying.debug($message, $cause)"
+    q"if ($underlying.isDebugEnabled) $underlying.debug(loggerName,$message, $cause)"
   }
 
   def debugMessageArgs(message: c.Expr[String], args: c.Expr[AnyRef]*) : c.Tree = {
     val underlying = q"${c.prefix}.underlying"
     if(disabled) q"()"
     else if (args.length == 2)
-      q"if ($underlying.isDebugEnabled) $underlying.debug($message, List(${args(0)}, ${args(1)}): _*)"
+      q"if ($underlying.isDebugEnabled) $underlying.debug(loggerName,$message, List(${args(0)}, ${args(1)}): _*)"
     else
-      q"if ($underlying.isDebugEnabled) $underlying.debug($message, ..$args)"
+      q"if ($underlying.isDebugEnabled) $underlying.debug(loggerName,$message, ..$args)"
   }
 
   // Trace
@@ -170,21 +170,21 @@ private class LoggerMacro(val c: Context) {
   def traceMessage(message: c.Expr[String]) : c.Tree = {
     val underlying = q"${c.prefix}.underlying"
     if(disabled) q"()" else
-    q"if ($underlying.isTraceEnabled) $underlying.trace($message)"
+    q"if ($underlying.isTraceEnabled) $underlying.trace(loggerName,$message)"
   }
 
   def traceMessageCause(message: c.Expr[String], cause: c.Expr[Throwable]) : c.Tree = {
     val underlying = q"${c.prefix}.underlying"
     if(disabled) q"()" else
-    q"if ($underlying.isTraceEnabled) $underlying.trace($message, $cause)"
+    q"if ($underlying.isTraceEnabled) $underlying.trace(loggerName,$message, $cause)"
   }
 
   def traceMessageArgs(message: c.Expr[String], args: c.Expr[AnyRef]*) : c.Tree = {
     val underlying = q"${c.prefix}.underlying"
     if(disabled) q"()"
     else if (args.length == 2)
-      q"if ($underlying.isTraceEnabled) $underlying.trace($message, List(${args(0)}, ${args(1)}): _*)"
+      q"if ($underlying.isTraceEnabled) $underlying.trace(loggerName,$message, List(${args(0)}, ${args(1)}): _*)"
     else
-      q"if ($underlying.isTraceEnabled) $underlying.trace($message, ..$args)"
+      q"if ($underlying.isTraceEnabled) $underlying.trace(loggerName,$message, ..$args)"
   }
 }
