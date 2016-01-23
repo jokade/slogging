@@ -25,13 +25,17 @@ object ConsoleLogger {
  *
  * @param name logger name
  */
-class ConsoleLogger(name: String) extends UnderlyingLogger {
+class ConsoleLogger(name: String) extends AbstractUnderlyingLogger {
   val console = global.console
 
-  def prefix(level: String) = if(ConsoleLogger.printLoggerName) s"[$level, $name]" else s"[$level]"
-  def msg(level: String, msg: String) = s"${prefix(level)} $msg"
-  def msg(level: String, msg: String, cause: Throwable) = s"${prefix(level)} $msg\n    $cause"
-  def msg(level: String, msg: String, args: AnyRef*) = s"${prefix(level)} ${String.format(msg,args)}"
+  @inline
+  final def prefix(level: String) = if(ConsoleLogger.printLoggerName) s"[$level, $name]" else s"[$level]"
+  @inline
+  final def msg(level: String, msg: String) = s"${prefix(level)} $msg"
+  @inline
+  final def msg(level: String, msg: String, cause: Throwable) = s"${prefix(level)} $msg\n    $cause"
+  @inline
+  final def msg(level: String, msg: String, args: AnyRef*) = s"${prefix(level)} ${String.format(msg,args)}"
 
 
   override def error(message: String): Unit = console.error(msg("ERROR",message))

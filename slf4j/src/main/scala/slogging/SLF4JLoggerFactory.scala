@@ -10,7 +10,7 @@ import org.slf4j
 object SLF4JLoggerFactory extends UnderlyingLoggerFactory {
   override def getUnderlyingLogger(name: String): UnderlyingLogger = new SLF4JLogger(slf4j.LoggerFactory.getLogger(name))
 
-  class SLF4JLogger(l: slf4j.Logger) extends UnderlyingLogger {
+  class SLF4JLogger(l: slf4j.Logger) extends AbstractUnderlyingLogger {
 
     override def error(message: String): Unit = l.error(message)
     override def error(message: String, cause: Throwable): Unit = l.error(message,cause)

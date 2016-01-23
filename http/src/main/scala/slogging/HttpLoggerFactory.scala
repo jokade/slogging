@@ -47,7 +47,7 @@ object HttpLoggerFactory {
                               clientId: String,
                               formatter: MessageFormatter)
 
-  class HttpLogger(name: String, config: HttpLoggerConfig) extends UnderlyingLogger {
+  class HttpLogger(name: String, config: HttpLoggerConfig) extends AbstractUnderlyingLogger {
     import config._
     @inline private final def log(level: String, msg: String): Unit = log(level,msg,null)
     @inline private final def log(level: String, msg: String, args: AnyRef*): Unit = log(level, String.format(msg, args), null)

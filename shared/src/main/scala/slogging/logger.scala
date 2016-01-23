@@ -19,7 +19,7 @@ object Logger {
  *
  * @param underlying
  */
-final class Logger private (val underlying: UnderlyingLogger) {
+final class Logger private (val underlying: UnderlyingLogger) extends AnyVal {
 
   // Error
 

@@ -3,6 +3,7 @@ import slogging._
 object Main {
 
   def main(args: Array[String]) : Unit = {
+    PrintLogger.printTimestamp = true
     val tests = Seq(
       new LazyLoggingTest(NullLoggerFactory),
       new LazyLoggingTest(PrintLoggerFactory),

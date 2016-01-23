@@ -6,16 +6,18 @@
 //               Distributed under the MIT License (see included file LICENSE)
 package slogging
 
+import java.util.Date
+
 /**
  * Common interface for LoggerS (this interface is compatible to the slf4j logging API)
  */
 trait UnderlyingLogger {
 
-  def isErrorEnabled: Boolean = LoggerConfig.level >= LogLevel.ERROR
-  def isWarnEnabled: Boolean = LoggerConfig.level >= LogLevel.WARN
-  def isInfoEnabled: Boolean = LoggerConfig.level >= LogLevel.INFO
-  def isDebugEnabled: Boolean = LoggerConfig.level >= LogLevel.DEBUG
-  def isTraceEnabled: Boolean = LoggerConfig.level >= LogLevel.TRACE
+  def isErrorEnabled: Boolean
+  def isWarnEnabled: Boolean
+  def isInfoEnabled: Boolean
+  def isDebugEnabled: Boolean
+  def isTraceEnabled: Boolean
 
   // Error
 
@@ -58,6 +60,18 @@ trait UnderlyingLogger {
   def trace(message: String, args: AnyRef*): Unit
 }
 
+abstract class AbstractUnderlyingLogger extends UnderlyingLogger {
+  @inline
+  final def isErrorEnabled: Boolean = LoggerConfig.level >= LogLevel.ERROR
+  @inline
+  final def isWarnEnabled: Boolean = LoggerConfig.level >= LogLevel.WARN
+  @inline
+  final def isInfoEnabled: Boolean = LoggerConfig.level >= LogLevel.INFO
+  @inline
+  final def isDebugEnabled: Boolean = LoggerConfig.level >= LogLevel.DEBUG
+  @inline
+  final def isTraceEnabled: Boolean = LoggerConfig.level >= LogLevel.TRACE
+}
 
 object NullLogger extends UnderlyingLogger {
   override val isErrorEnabled: Boolean = false
@@ -101,13 +115,31 @@ object LogLevel extends Enumeration {
 }
 
 object PrintLogger {
-  var printLoggerName : Boolean = true
+  private var _printLoggerName: Boolean = true
+  private var _printTimestamp: Boolean = false
+  @inline
+  def printLoggerName : Boolean = _printLoggerName
+  def printLoggerName_=(f: Boolean) = this.synchronized( _printLoggerName = f )
+  @inline
+  def printTimestamp : Boolean = _printTimestamp
+  def printTimestamp_=(f: Boolean) = this.synchronized( _printTimestamp = f )
 }
 
-class PrintLogger(name: String) extends UnderlyingLogger {
-  def prefix(level: String) = if(PrintLogger.printLoggerName) s"[$level, $name]" else s"[$level]"
+final class PrintLogger(name: String) extends AbstractUnderlyingLogger {
+  @inline
+  private def getTimestamp() = new Date().toString
+  @inline
+  def prefix(level: String) =
+    if(PrintLogger.printTimestamp) {
+      if(PrintLogger.printLoggerName) s"[${getTimestamp()}, $level, $name]" else s"[${getTimestamp()}, $level]"
+    } else {
+      if(PrintLogger.printLoggerName) s"[$level, $name]" else s"[$level]"
+    }
+  @inline
   def msg(level: String, msg: String) = println(s"${prefix(level)} $msg")
+  @inline
   def msg(level: String, msg: String, cause: Throwable) = println(s"${prefix(level)} $msg\n    $cause")
+  @inline
   def msg(level: String, msg: String, args: AnyRef*) = println(s"${prefix(level)} ${String.format(msg,args)}")
 
   override def error(message: String): Unit = msg("ERROR",message)
@@ -148,8 +180,10 @@ object LoggerFactory {
 object LoggerConfig {
   private var _factory : UnderlyingLoggerFactory = NullLoggerFactory
   private var _level : LogLevel.Value = LogLevel.INFO
+  @inline
   def factory = _factory
   def factory_=(f: UnderlyingLoggerFactory) = this.synchronized{ _factory = f }
+  @inline
   def level = _level
   def level_=(l: LogLevel.Value) = this.synchronized{ _level = l }
 }

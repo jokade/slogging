@@ -31,7 +31,7 @@ object WinstonLoggerFactory {
 class WinstonLoggerFactory(_logger: WinstonLogger) extends UnderlyingLoggerFactory {
   override def getUnderlyingLogger(name: String): UnderlyingLogger = new WinstonLoggerImpl(name,_logger)
 
-  private class WinstonLoggerImpl(name: String, l: WinstonLogger) extends UnderlyingLogger {
+  private class WinstonLoggerImpl(name: String, l: WinstonLogger) extends AbstractUnderlyingLogger {
     def prefix(level: String) = "" //if(ConsoleLogger.printLoggerName) s"[$level, $name]" else s"[$level]"
     def msg(level: String, msg: String) = s"${prefix(level)} $msg"
     def msg(level: String, msg: String, cause: Throwable) = s"${prefix(level)} $msg\n    $cause"

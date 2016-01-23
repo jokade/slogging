@@ -124,8 +124,11 @@ libraryDependencies += "biz.enef" %% "slogging" % "VERSION"
 ```scala
 import slogging._
 
-// activate PrintLogger; no additional configuration required
+// activate PrintLogger
 LoggerConfig.factory = PrintLoggerFactory()
+
+// set this to activate timestamp logging
+PrintLogger.printTimestamp = true
 ```
 
 #### SLF4JLoggerFactory
