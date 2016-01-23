@@ -12,25 +12,25 @@ object SLF4JLoggerFactory extends UnderlyingLoggerFactory {
 
   class SLF4JLogger(l: slf4j.Logger) extends AbstractUnderlyingLogger {
 
-    override def error(message: String): Unit = l.error(message)
-    override def error(message: String, cause: Throwable): Unit = l.error(message,cause)
-    override def error(message: String, args: AnyRef*): Unit = l.error(message,args:_*)
+    override def error(source: String, message: String): Unit = l.error(message)
+    override def error(source: String, message: String, cause: Throwable): Unit = l.error(message,cause)
+    override def error(source: String, message: String, args: AnyRef*): Unit = l.error(message,args:_*)
 
-    override def warn(message: String): Unit = l.warn(message)
-    override def warn(message: String, cause: Throwable): Unit = l.warn(message,cause)
-    override def warn(message: String, args: AnyRef*): Unit = l.warn(message,args:_*)
+    override def warn(source: String, message: String): Unit = l.warn(message)
+    override def warn(source: String, message: String, cause: Throwable): Unit = l.warn(message,cause)
+    override def warn(source: String, message: String, args: AnyRef*): Unit = l.warn(message,args:_*)
 
-    override def info(message: String): Unit = l.info(message)
-    override def info(message: String, cause: Throwable): Unit = l.info(message,cause)
-    override def info(message: String, args: AnyRef*): Unit = l.info(message,args:_*)
+    override def info(source: String, message: String): Unit = l.info(message)
+    override def info(source: String, message: String, cause: Throwable): Unit = l.info(message,cause)
+    override def info(source: String, message: String, args: AnyRef*): Unit = l.info(message,args:_*)
 
-    override def debug(message: String): Unit = l.debug(message)
-    override def debug(message: String, cause: Throwable): Unit = l.debug(message,cause)
-    override def debug(message: String, args: AnyRef*): Unit = l.debug(message,args:_*)
+    override def debug(source: String, message: String): Unit = l.debug(message)
+    override def debug(source: String, message: String, cause: Throwable): Unit = l.debug(message,cause)
+    override def debug(source: String, message: String, args: AnyRef*): Unit = l.debug(message,args:_*)
 
-    override def trace(message: String): Unit = l.trace(message)
-    override def trace(message: String, cause: Throwable): Unit = l.trace(message,cause)
-    override def trace(message: String, args: AnyRef*): Unit = l.trace(message, args:_*)
+    override def trace(source: String, message: String): Unit = l.trace(message)
+    override def trace(source: String, message: String, cause: Throwable): Unit = l.trace(message,cause)
+    override def trace(source: String, message: String, args: AnyRef*): Unit = l.trace(message, args:_*)
 
   }
 }

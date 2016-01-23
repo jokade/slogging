@@ -10,6 +10,7 @@ package slogging
  * Marks trait for objects that provide a Logger.
  */
 trait LoggerHolder {
+  protected final val loggerName: String = getClass.getName
   protected def logger: Logger
 }
 
@@ -18,7 +19,7 @@ trait LoggerHolder {
  * named according to the class into which this trait is mixed
  */
 trait LazyLogging extends LoggerHolder {
-  protected lazy val logger = LoggerFactory.getLogger(getClass.getName)
+  protected lazy val logger = LoggerFactory.getLogger(loggerName)
 }
 
 /**
@@ -26,5 +27,5 @@ trait LazyLogging extends LoggerHolder {
  * named according to the class into which this trait is mixed
  */
 trait StrictLogging extends LoggerHolder {
-  protected val logger : Logger = LoggerFactory.getLogger(getClass.getName)
+  protected val logger : Logger = LoggerFactory.getLogger(loggerName)
 }
