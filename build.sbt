@@ -1,9 +1,8 @@
-//import SonatypeKeys._
 
 lazy val commonSettings = Seq(
   organization := "biz.enef",
   version := "0.4-SNAPSHOT",
-  scalaVersion := "2.11.6",
+  scalaVersion := "2.11.7",
   scalacOptions ++= Seq("-deprecation","-unchecked","-feature","-Xlint")
 )
 
@@ -14,7 +13,8 @@ lazy val root = project.in(file(".")).
   settings(
     name := "slogging",
     publish := {},
-    publishLocal := {}
+    publishLocal := {},
+    resolvers += Resolver.sonatypeRepo("releases")
   )
 
 lazy val slogging = crossProject.in(file(".")).
@@ -23,7 +23,7 @@ lazy val slogging = crossProject.in(file(".")).
   settings(
     name := "slogging",
     libraryDependencies ++= Seq(
-      "org.scala-lang" % "scala-reflect" % "2.11.6"
+      "org.scala-lang" % "scala-reflect" % "2.11.7"
     )
   ).
   jvmSettings(
@@ -42,7 +42,7 @@ lazy val slf4j = project.
   settings(publishingSettings:_*).
   settings(
     name := "slogging-slf4j",
-    libraryDependencies += "org.slf4j" % "slf4j-api" % "1.7.+"
+    libraryDependencies += "org.slf4j" % "slf4j-api" % "1.7.12"
   )
 
 lazy val winston = project.

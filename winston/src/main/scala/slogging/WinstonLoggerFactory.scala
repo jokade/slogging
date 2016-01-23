@@ -17,6 +17,7 @@ object WinstonLoggerFactory {
   def apply() : UnderlyingLoggerFactory = _default
   def apply(wlogger: WinstonLogger) : UnderlyingLoggerFactory = new WinstonLoggerFactory(wlogger)
 
+  @js.native
   trait WinstonLogger extends js.Object {
     def log(level: String, msg: String): Unit = js.native
   }
