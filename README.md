@@ -1,15 +1,16 @@
 slogging
 ========
-[![Build Status](https://travis-ci.org/jokade/slogging.svg?branch=v0.4)](https://travis-ci.org/jokade/slogging)
+[![Build Status](https://travis-ci.org/jokade/slogging.svg?branch=master)](https://travis-ci.org/jokade/slogging)
 
 A simple logging library for Scala and [Scala.js](http://www.scala-js.org). Slogging is compatible to the [scala-logging](https://github.com/typesafehub/scala-logging) (and slf4j) API, and uses macros to check if logging statements should be executed.
 
-**News:** Version 0.3 has been released ([release notes](https://github.com/jokade/slogging/wiki/Release-Notes))!
+**News:** Version 0.4.0 has been released ([release notes](https://github.com/jokade/slogging/wiki/Release-Notes))!
 
 #### Contents:
 * [Getting Started](#getting-started)
   * [SBT Settings](#sbt-settings)
   * [Logging and Configuration](#logging-and-configuration)
+  * [FilterLogger](#filterlogger)
 * [Backends](#backends)
   * [Scala / JVM](#scala--jvm)
     * [PrintLogger](#printloggerfactory)
@@ -28,30 +29,30 @@ Add one of the following lines to your `build.sbt` (depending on your target):
 
 **Scala/JVM** with logging to stdout:
 ```scala
-libraryDependencies += "biz.enef" %% "slogging" % "0.3"
+libraryDependencies += "biz.enef" %% "slogging" % "0.4.0"
 ```
 with slf4j:
 ```scala
 libraryDependencies ++= Seq(
-  "biz.enef" %% "slogging-slf4j" % "0.3",
+  "biz.enef" %% "slogging-slf4j" % "0.4.0",
   "org.slf4j" % "slf4j-simple" % "1.7.+"  // or another slf4j implementation
 )
 ```
 
 **Scala.js** with logging to console:
 ```scala
-libraryDependencies += "biz.enef" %%% "slogging" % "0.3"
+libraryDependencies += "biz.enef" %%% "slogging" % "0.4.0"
 ```
 with [winston](https://www.npmjs.com/package/winston) (Node.js):
 ```scala
-libraryDependencies += "biz.enef" %%% "slogging-winston" % "0.3"
+libraryDependencies += "biz.enef" %%% "slogging-winston" % "0.4.0"
 ```
 with remote logging via HTTP POST:
 ```scala
-libraryDependencies += "biz.enef" %%% "slogging-http" % "0.3"
+libraryDependencies += "biz.enef" %%% "slogging-http" % "0.4.0"
 ```
 
-slogging 0.3 is published for Scala 2.11.x and Scala.js 0.6.2+.
+slogging 0.4.0 is published for Scala 2.11.x and Scala.js 0.6.5+.
 
 ### Logging and Configuration
 #### Add logging statements
@@ -108,6 +109,25 @@ It is possible to omit logging statements from the generated code altogether. To
 ```scala
 scalacOptions += "-Xmacro-settings:slogging.disable"
 ```
+
+### FilterLogger
+Sometimes it is useful to enable detailed logging (e.g. `LogLevel.TRACE`) only for some classes. This can be achieved using `FilterLoggerFactory` and setting `FilterLogger.filter` to a custom filter PartialFunction. The filter function receives a tuple `(LogLevel.Value,String)` that contains the log level and logger source name for every logging message; it must return the `UnderlyingLogger` instance to be used for this logging statement (and must be defined for every input, so make sure to provide a default case):
+```scala
+import slogging._
+
+LoggerConfig.factory = FilterLoggerFactory()
+LoggerConfig.level = LogLevel.TRACE
+
+FilterLogger.filter = {
+  // use PrintLogger for all trace statements from sources starting with "foo.bar"
+  case (LogLevel.TRACE,source) if source.startsWith("foo.bar") => PrintLogger
+  // ignore all other trace statements
+  case (LogLevel.TRACE,_) => NullLogger
+  // log all other levels
+  case _ => PrintLogger
+}
+```
+**Note:** The filter function is called _after_ the current value of `LoggerConfig.level` has been checked. Hence, even if you want to log TRACE statements for a specific source using `FilterLogger`, you need to set `FilterConfig.level = LogLevel.TRACE`. This also means that _all_ TRACE logging  statements in the code are executed, even if they are subsequently discarded by `NullLogger`, which may have a serious impact on performance.
 
 Backends
 --------
