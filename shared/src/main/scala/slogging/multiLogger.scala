@@ -9,23 +9,23 @@ final class MultiLogger(loggers: Iterable[UnderlyingLogger]) extends AbstractUnd
 
   override def error(source: String, message: String): Unit = loggers.foreach(_.error(source,message))
   override def error(source: String, message: String, cause: Throwable): Unit = loggers.foreach(_.error(source,message,cause))
-  override def error(source: String, message: String, args: AnyRef*): Unit = loggers.foreach(_.error(source,message,args:_*))
+  override def error(source: String, message: String, args: Any*): Unit = loggers.foreach(_.error(source,message,args:_*))
 
   override def warn(source: String, message: String): Unit = loggers.foreach(_.warn(source,message))
   override def warn(source: String, message: String, cause: Throwable): Unit = loggers.foreach(_.warn(source,message,cause))
-  override def warn(source: String, message: String, args: AnyRef*): Unit = loggers.foreach(_.warn(source,message,args:_*))
+  override def warn(source: String, message: String, args: Any*): Unit = loggers.foreach(_.warn(source,message,args:_*))
 
   override def info(source: String, message: String): Unit = loggers.foreach(_.info(source,message))
   override def info(source: String, message: String, cause: Throwable): Unit = loggers.foreach(_.info(source,message,cause))
-  override def info(source: String, message: String, args: AnyRef*): Unit = loggers.foreach(_.info(source,message,args:_*))
+  override def info(source: String, message: String, args: Any*): Unit = loggers.foreach(_.info(source,message,args:_*))
 
   override def debug(source: String, message: String): Unit = loggers.foreach(_.debug(source,message))
   override def debug(source: String, message: String, cause: Throwable): Unit = loggers.foreach(_.debug(source,message,cause))
-  override def debug(source: String, message: String, args: AnyRef*): Unit = loggers.foreach(_.debug(source,message,args:_*))
+  override def debug(source: String, message: String, args: Any*): Unit = loggers.foreach(_.debug(source,message,args:_*))
 
   override def trace(source: String, message: String): Unit = loggers.foreach(_.trace(source,message))
   override def trace(source: String, message: String, cause: Throwable): Unit = loggers.foreach(_.trace(source,message,cause))
-  override def trace(source: String, message: String, args: AnyRef*): Unit = loggers.foreach(_.trace(source,message,args:_*))
+  override def trace(source: String, message: String, args: Any*): Unit = loggers.foreach(_.trace(source,message,args:_*))
 
 }
 

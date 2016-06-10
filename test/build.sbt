@@ -1,4 +1,4 @@
-val sloggingVersion = "0.4.1-SNAPSHOT"
+val sloggingVersion = "0.5-SNAPSHOT"
 
 lazy val commonSettings = Seq(
   scalaVersion := "2.11.7",

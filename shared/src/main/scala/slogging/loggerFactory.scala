@@ -25,7 +25,7 @@ trait UnderlyingLogger {
 
   def error(source: String, message: String, cause: Throwable) : Unit
 
-  def error(source: String, message: String, args: AnyRef*) : Unit
+  def error(source: String, message: String, args: Any*) : Unit
 
   // Warn
 
@@ -33,7 +33,7 @@ trait UnderlyingLogger {
 
   def warn(source: String, message: String, cause: Throwable): Unit
 
-  def warn(source: String, message: String, args: AnyRef*): Unit
+  def warn(source: String, message: String, args: Any*): Unit
 
   // Info
 
@@ -41,7 +41,7 @@ trait UnderlyingLogger {
 
   def info(source: String, message: String, cause: Throwable) : Unit
 
-  def info(source: String, message: String, args: AnyRef*) : Unit
+  def info(source: String, message: String, args: Any*) : Unit
 
   // Debug
 
@@ -49,7 +49,7 @@ trait UnderlyingLogger {
 
   def debug(source: String, message: String, cause: Throwable): Unit
 
-  def debug(source: String, message: String, args: AnyRef*): Unit
+  def debug(source: String, message: String, args: Any*): Unit
 
   // Trace
 
@@ -57,7 +57,7 @@ trait UnderlyingLogger {
 
   def trace(source: String, message: String, cause: Throwable): Unit
 
-  def trace(source: String, message: String, args: AnyRef*): Unit
+  def trace(source: String, message: String, args: Any*): Unit
 }
 
 abstract class AbstractUnderlyingLogger extends UnderlyingLogger {
@@ -82,23 +82,23 @@ object NullLogger extends UnderlyingLogger {
 
   override def error(source: String, message: String): Unit = {}
   override def error(source: String, message: String, cause: Throwable): Unit = {}
-  override def error(source: String, message: String, args: AnyRef*): Unit = {}
+  override def error(source: String, message: String, args: Any*): Unit = {}
 
   override def warn(source: String, message: String): Unit = {}
   override def warn(source: String, message: String, cause: Throwable): Unit = {}
-  override def warn(source: String, message: String, args: AnyRef*): Unit = {}
+  override def warn(source: String, message: String, args: Any*): Unit = {}
 
   override def info(source: String, message: String): Unit = {}
   override def info(source: String, message: String, cause: Throwable): Unit = {}
-  override def info(source: String, message: String, args: AnyRef*): Unit = {}
+  override def info(source: String, message: String, args: Any*): Unit = {}
 
   override def debug(source: String, message: String): Unit = {}
   override def debug(source: String, message: String, cause: Throwable): Unit = {}
-  override def debug(source: String, message: String, args: AnyRef*): Unit = {}
+  override def debug(source: String, message: String, args: Any*): Unit = {}
 
   override def trace(source: String, message: String): Unit = {}
   override def trace(source: String, message: String, cause: Throwable): Unit = {}
-  override def trace(source: String, message: String, args: AnyRef*): Unit = {}
+  override def trace(source: String, message: String, args: Any*): Unit = {}
 }
 
 object NullLoggerFactory extends UnderlyingLoggerFactory {
@@ -115,6 +115,7 @@ object LogLevel extends Enumeration {
 }
 
 object PrintLogger extends AbstractUnderlyingLogger {
+  import LoggingUtils.formatMessage
   private var _printLoggerName: Boolean = true
   private var _printTimestamp: Boolean = false
   @inline
@@ -125,11 +126,11 @@ object PrintLogger extends AbstractUnderlyingLogger {
   def printTimestamp_=(f: Boolean) = this.synchronized( _printTimestamp = f )
 
   @inline
-  private def getTimestamp() = new Date().toString
+  private def getTimestamp = new Date().toString
   @inline
   def prefix(level: String, src: String) =
     if(PrintLogger.printTimestamp) {
-      if(PrintLogger.printLoggerName) s"[${getTimestamp()}, $level, $src]" else s"[${getTimestamp()}, $level]"
+      if(PrintLogger.printLoggerName) s"[${getTimestamp}, $level, $src]" else s"[${getTimestamp}, $level]"
     } else {
       if(PrintLogger.printLoggerName) s"[$level, $src]" else s"[$level]"
     }
@@ -138,27 +139,48 @@ object PrintLogger extends AbstractUnderlyingLogger {
   @inline
   def msg(level: String, src: String, msg: String, cause: Throwable) = println(s"${prefix(level,src)} $msg\n    $cause")
   @inline
-  def msg(level: String, src: String, msg: String, args: AnyRef*) = println(s"${prefix(level,src)} ${String.format(msg,args)}")
+  def msg(level: String, src: String, msg: String, args: Any*) = println(s"${prefix(level,src)} ${formatMessage(msg,args)}")
 
   override def error(source: String, message: String): Unit = msg("ERROR",source,message)
   override def error(source: String, message: String, cause: Throwable): Unit = msg("ERROR",source,message,cause)
-  override def error(source: String, message: String, args: AnyRef*): Unit = msg("ERROR",source,message,args)
+  override def error(source: String, message: String, args: Any*): Unit = msg("ERROR",source,message,args:_*)
 
   override def warn(source: String, message: String): Unit = msg("WARN",source,message)
   override def warn(source: String, message: String, cause: Throwable): Unit = msg("WARN",source,message,cause)
-  override def warn(source: String, message: String, args: AnyRef*): Unit = msg("WARN",source,message,args)
+  override def warn(source: String, message: String, args: Any*): Unit = msg("WARN",source,message,args:_*)
 
   override def info(source: String, message: String): Unit = msg("INFO",source,message)
   override def info(source: String, message: String, cause: Throwable): Unit = msg("INFO",source,message,cause)
-  override def info(source: String, message: String, args: AnyRef*): Unit = msg("INFO",source,message,args)
+  override def info(source: String, message: String, args: Any*): Unit = msg("INFO",source,message,args:_*)
 
   override def debug(source: String, message: String): Unit = msg("DEBUG",source,message)
   override def debug(source: String, message: String, cause: Throwable): Unit = msg("DEBUG",source,message,cause)
-  override def debug(source: String, message: String, args: AnyRef*): Unit = msg("DEBUG",source,message,args)
+  override def debug(source: String, message: String, args: Any*): Unit = msg("DEBUG",source,message,args:_*)
 
   override def trace(source: String, message: String): Unit = msg("TRACE",source,message)
   override def trace(source: String, message: String, cause: Throwable): Unit = msg("TRACE",source,message,cause)
-  override def trace(source: String, message: String, args: AnyRef*): Unit = msg("TRACE",source,message,args)
+  override def trace(source: String, message: String, args: Any*): Unit = msg("TRACE",source,message,args:_*)
+}
+
+object LoggingUtils {
+
+  // TODO: optimize?
+  def formatMessage(msg: String, args: Seq[Any]) : String =
+    if(args.isEmpty) msg
+    else {
+      @annotation.tailrec
+      def loop(acc: String, chars: List[Char], args: Seq[Any]): String =
+        if(chars.isEmpty) acc
+        else if(args.isEmpty) acc + chars.mkString
+        else chars match {
+          case '{' :: '}' :: xs  =>
+            loop( acc + args.head, xs, args.tail )
+          case a :: xs => loop( acc + a, xs, args )
+          case Nil => acc
+        }
+
+      loop("",msg.toList,args)
+    }
 }
 
 
@@ -176,12 +198,21 @@ object LoggerFactory {
 }
 
 object LoggerConfig {
+  type LoggingHook = Function3[LogLevel.Value,String,String,Unit]
+
+  val defaultHook: LoggingHook = (_,_,_) => {}
+
   private var _factory : UnderlyingLoggerFactory = NullLoggerFactory
   private var _level : LogLevel.Value = LogLevel.INFO
+  private var _errorHook = defaultHook
+
   @inline
   def factory = _factory
   def factory_=(f: UnderlyingLoggerFactory) = this.synchronized{ _factory = f }
   @inline
   def level = _level
   def level_=(l: LogLevel.Value) = this.synchronized{ _level = l }
+  @inline
+  def onError: LoggingHook = _errorHook
+  def onError_=(listener: LoggingHook) = this.synchronized( _errorHook = listener )
 }

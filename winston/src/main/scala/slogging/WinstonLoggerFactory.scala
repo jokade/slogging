@@ -29,6 +29,7 @@ object WinstonLoggerFactory {
 }
 
 class WinstonLoggerFactory(_logger: WinstonLogger) extends UnderlyingLoggerFactory {
+  import LoggingUtils.formatMessage
   private val logger = new WinstonLoggerImpl(_logger)
   override def getUnderlyingLogger(name: String): UnderlyingLogger =  logger
 
@@ -40,27 +41,27 @@ class WinstonLoggerFactory(_logger: WinstonLogger) extends UnderlyingLoggerFacto
     @inline
     def msg(level: String, src: String, msg: String, cause: Throwable) = s"${prefix(level,src)} $msg\n    $cause"
     @inline
-    def msg(level: String, src: String, msg: String, args: AnyRef*) = s"${prefix(level,src)} ${String.format(msg,args)}"
+    def msg(level: String, src: String, msg: String, args: Any*) = s"${prefix(level,src)} ${formatMessage(msg,args)}"
 
 
     override def error(source: String, message: String): Unit = l.log("error",msg("error",source,message))
     override def error(source: String, message: String, cause: Throwable): Unit = l.log("error",msg("ERROR",source,message,cause))
-    override def error(source: String, message: String, args: AnyRef*): Unit = l.log("error",msg("ERROR",source,message,args))
+    override def error(source: String, message: String, args: Any*): Unit = l.log("error",msg("ERROR",source,message,args:_*))
 
     override def warn(source: String, message: String): Unit = l.log("warn",msg("WARN",source,message))
     override def warn(source: String, message: String, cause: Throwable): Unit = l.log("warn",msg("WARN",source,message,cause))
-    override def warn(source: String, message: String, args: AnyRef*): Unit = l.log("warn",msg("WARN",source,message,args))
+    override def warn(source: String, message: String, args: Any*): Unit = l.log("warn",msg("WARN",source,message,args:_*))
 
     override def info(source: String, message: String): Unit = l.log("info",msg("INFO",source,message))
     override def info(source: String, message: String, cause: Throwable): Unit = l.log("info",msg("INFO",source,message,cause))
-    override def info(source: String, message: String, args: AnyRef*): Unit = l.log("info",msg("INFO",source,message,args))
+    override def info(source: String, message: String, args: Any*): Unit = l.log("info",msg("INFO",source,message,args:_*))
 
     override def debug(source: String, message: String): Unit = l.log("debug",msg("DEBUG",source,message))
     override def debug(source: String, message: String, cause: Throwable): Unit = l.log("debug",msg("DEBUG",source,message,cause))
-    override def debug(source: String, message: String, args: AnyRef*): Unit = l.log("debug",msg("DEBUG",source,message,args))
+    override def debug(source: String, message: String, args: Any*): Unit = l.log("debug",msg("DEBUG",source,message,args:_*))
 
     override def trace(source: String, message: String): Unit = l.log("trace",msg("TRACE",source,message))
     override def trace(source: String, message: String, cause: Throwable): Unit = l.log("trace",msg("TRACE",source,message,cause))
-    override def trace(source: String, message: String, args: AnyRef*): Unit = l.log("trace",msg("TRACE",source,message,args))
+    override def trace(source: String, message: String, args: Any*): Unit = l.log("trace",msg("TRACE",source,message,args:_*))
   }
 }

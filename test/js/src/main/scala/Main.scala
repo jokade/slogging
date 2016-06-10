@@ -26,9 +26,9 @@ object Main extends js.JSApp {
             literal(level = "trace")
           ))
       ))))
-      },
+      }
       // http
-      httpLoggerTest()
+      //httpLoggerTest()
     )
 
     tests.foreach( _.run )

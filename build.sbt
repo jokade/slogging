@@ -1,7 +1,7 @@
 
 lazy val commonSettings = Seq(
   organization := "biz.enef",
-  version := "0.4.0",
+  version := "0.5-SNAPSHOT",
   scalaVersion := "2.11.7",
   scalacOptions ++= Seq("-deprecation","-unchecked","-feature","-Xlint")
 )
@@ -23,8 +23,10 @@ lazy val slogging = crossProject.in(file(".")).
   settings(
     name := "slogging",
     libraryDependencies ++= Seq(
-      "org.scala-lang" % "scala-reflect" % "2.11.7"
-    )
+      "org.scala-lang" % "scala-reflect" % "2.11.7",
+      "com.lihaoyi" %%% "utest" % "0.4.3" % "test"
+    ),
+    testFrameworks += new TestFramework("utest.runner.Framework")
   ).
   jvmSettings(
   ).
