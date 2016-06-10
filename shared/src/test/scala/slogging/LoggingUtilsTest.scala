@@ -19,7 +19,7 @@ object LoggingUtilsTest extends TestSuite {
       assert( formatMessage("{}",Seq(42).asInstanceOf[Seq[AnyRef]]) == "42" )
       assert( formatMessage("{}",Nil) == "{}" )
       assert( formatMessage("{}, {}",Seq(42).asInstanceOf[Seq[AnyRef]]) == "42, {}" )
-      assert( formatMessage("message: {},{},{}",Seq(1.0,2.0,3.0)) == "message: 1.0,2.0,3.0")
+      assert( formatMessage("message: {},{},{}",Seq(1,2,3)) == "message: 1,2,3")
     }
   }
 }
