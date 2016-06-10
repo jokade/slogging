@@ -4,7 +4,7 @@ slogging
 
 A simple logging library for Scala and [Scala.js](http://www.scala-js.org). Slogging is compatible to the [scala-logging](https://github.com/typesafehub/scala-logging) (and slf4j) API, and uses macros to check if logging statements should be executed.
 
-**News:** Version 0.4.0 has been released ([release notes](https://github.com/jokade/slogging/wiki/Release-Notes))!
+**News:** Version 0.5.0 has been released ([release notes](https://github.com/jokade/slogging/wiki/Release-Notes))!
 
 #### Contents:
 * [Getting Started](#getting-started)
@@ -29,30 +29,30 @@ Add one of the following lines to your `build.sbt` (depending on your target):
 
 **Scala/JVM** with logging to stdout:
 ```scala
-libraryDependencies += "biz.enef" %% "slogging" % "0.4.0"
+libraryDependencies += "biz.enef" %% "slogging" % "0.5.0"
 ```
 with slf4j:
 ```scala
 libraryDependencies ++= Seq(
-  "biz.enef" %% "slogging-slf4j" % "0.4.0",
+  "biz.enef" %% "slogging-slf4j" % "0.5.0",
   "org.slf4j" % "slf4j-simple" % "1.7.+"  // or another slf4j implementation
 )
 ```
 
 **Scala.js** with logging to console:
 ```scala
-libraryDependencies += "biz.enef" %%% "slogging" % "0.4.0"
+libraryDependencies += "biz.enef" %%% "slogging" % "0.5.0"
 ```
 with [winston](https://www.npmjs.com/package/winston) (Node.js):
 ```scala
-libraryDependencies += "biz.enef" %%% "slogging-winston" % "0.4.0"
+libraryDependencies += "biz.enef" %%% "slogging-winston" % "0.5.0"
 ```
 with remote logging via HTTP POST:
 ```scala
-libraryDependencies += "biz.enef" %%% "slogging-http" % "0.4.0"
+libraryDependencies += "biz.enef" %%% "slogging-http" % "0.5.0"
 ```
 
-slogging 0.4.0 is published for Scala 2.11.x and Scala.js 0.6.5+.
+slogging 0.5.0 is published for Scala 2.11.x and Scala.js 0.6.9+.
 
 ### Logging and Configuration
 #### Add logging statements
@@ -76,6 +76,8 @@ class Foo extends LazyLogging {
     logger.debug("...")
     // log a tracing message
     logger.trace("...")
+    // log a parameterized message
+    logger.info("foo={}, bar={}",1,true)
   }
 }
 ```
