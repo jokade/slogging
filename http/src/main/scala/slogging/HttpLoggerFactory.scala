@@ -49,8 +49,8 @@ object HttpLoggerFactory {
 
   class HttpLogger(config: HttpLoggerConfig) extends AbstractUnderlyingLogger {
     import config._
-    @inline private final def log(level: String, src: String, msg: String): Unit = log(level,msg,null)
-    @inline private final def log(level: String, src: String, msg: String, args: Any*): Unit = log(level, String.format(msg, args), null)
+    @inline private final def log(level: String, src: String, msg: String): Unit = log(level, src, msg, null)
+    @inline private final def log(level: String, src: String, msg: String, args: Any*): Unit = log(level, src, String.format(msg, args), null)
     private final def log(level: String, src: String, msg: String, cause: Throwable): Unit = sendMessage(url, formatter(clientId,level,src,msg,cause))
 
 
