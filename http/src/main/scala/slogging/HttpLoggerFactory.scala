@@ -28,11 +28,11 @@ object HttpLoggerFactory {
    *   <li>cause (may be null)</li>
    * </ul>
    */
-  type MessageFormatter = (String,String,String,String,Throwable) => js.Object
+  type MessageFormatter = (String,MessageLevel,String,String,Throwable) => js.Object
 
   val defaultFormatter: MessageFormatter = (clientId,level,name,msg,cause) => js.Dynamic.literal(
     clientId = clientId,
-    level = level,
+    level = level match { case MessageLevel.Trace => "trace" case MessageLevel.Debug => "debug" case MessageLevel.Info => "info" case MessageLevel.Warn => "warn" case MessageLevel.Error => "error" },
     name = name,
     msg = msg,
     cause = if(cause==null) "" else cause.toString
@@ -47,32 +47,41 @@ object HttpLoggerFactory {
                               clientId: String,
                               formatter: MessageFormatter)
 
+  sealed trait MessageLevel
+  object MessageLevel {
+    case object Trace extends MessageLevel
+    case object Debug extends MessageLevel
+    case object Info extends MessageLevel
+    case object Warn extends MessageLevel
+    case object Error extends MessageLevel
+  }
+
   class HttpLogger(config: HttpLoggerConfig) extends AbstractUnderlyingLogger {
     import config._
-    @inline private final def log(level: String, src: String, msg: String): Unit = log(level, src, msg, null)
-    @inline private final def log(level: String, src: String, msg: String, args: Any*): Unit = log(level, src, String.format(msg, args), null)
-    private final def log(level: String, src: String, msg: String, cause: Throwable): Unit = sendMessage(url, formatter(clientId,level,src,msg,cause))
+    @inline private final def log(level: MessageLevel, src: String, msg: String): Unit = log(level, src, msg, null)
+    @inline private final def log(level: MessageLevel, src: String, msg: String, args: Any*): Unit = log(level, src, String.format(msg, args), null)
+    private final def log(level: MessageLevel, src: String, msg: String, cause: Throwable): Unit = sendMessage(url, formatter(clientId,level,src,msg,cause))
 
 
-    @inline final override def error(source: String, message: String): Unit = log("error", source,message)
-    @inline final override def error(source: String, message: String, cause: Throwable): Unit = log("error", source,message, cause)
-    @inline final override def error(source: String, message: String, args: Any*): Unit = log("error", source,message, args)
+    @inline final override def error(source: String, message: String): Unit = log(MessageLevel.Error, source,message)
+    @inline final override def error(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.Error, source,message, cause)
+    @inline final override def error(source: String, message: String, args: Any*): Unit = log(MessageLevel.Error, source,message, args)
 
-    @inline final override def warn(source: String, message: String): Unit = log("warn", source,message)
-    @inline final override def warn(source: String, message: String, cause: Throwable): Unit = log("warn", source,message, cause)
-    @inline final override def warn(source: String, message: String, args: Any*): Unit = log("warn", source,message, args)
+    @inline final override def warn(source: String, message: String): Unit = log(MessageLevel.Warn, source,message)
+    @inline final override def warn(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.Warn, source,message, cause)
+    @inline final override def warn(source: String, message: String, args: Any*): Unit = log(MessageLevel.Warn, source,message, args)
 
-    @inline final override def info(source: String, message: String): Unit = log("info", source,message)
-    @inline final override def info(source: String, message: String, cause: Throwable): Unit = log("info", source,message, cause)
-    @inline final override def info(source: String, message: String, args: Any*): Unit = log("info", source,message, args)
+    @inline final override def info(source: String, message: String): Unit = log(MessageLevel.Info, source,message)
+    @inline final override def info(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.Info, source,message, cause)
+    @inline final override def info(source: String, message: String, args: Any*): Unit = log(MessageLevel.Info, source,message, args)
 
-    @inline final override def debug(source: String, message: String): Unit = log("debug", source,message)
-    @inline final override def debug(source: String, message: String, cause: Throwable): Unit = log("debug", source,message, cause)
-    @inline final override def debug(source: String, message: String, args: Any*): Unit = log("debug", source,message, args)
+    @inline final override def debug(source: String, message: String): Unit = log(MessageLevel.Debug, source,message)
+    @inline final override def debug(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.Debug, source,message, cause)
+    @inline final override def debug(source: String, message: String, args: Any*): Unit = log(MessageLevel.Debug, source,message, args)
 
-    @inline final override def trace(source: String, message: String): Unit = log("trace", source,message)
-    @inline final override def trace(source: String, message: String, cause: Throwable): Unit = log("trace", source,message, cause)
-    @inline final override def trace(source: String, message: String, args: Any*): Unit = log("trace", source,message, args)
+    @inline final override def trace(source: String, message: String): Unit = log(MessageLevel.Trace, source,message)
+    @inline final override def trace(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.Trace, source,message, cause)
+    @inline final override def trace(source: String, message: String, args: Any*): Unit = log(MessageLevel.Trace, source,message, args)
   }
 }
 
