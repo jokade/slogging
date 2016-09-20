@@ -47,15 +47,6 @@ object HttpLoggerFactory {
                               clientId: String,
                               formatter: MessageFormatter)
 
-  sealed trait MessageLevel
-  object MessageLevel {
-    case object Trace extends MessageLevel
-    case object Debug extends MessageLevel
-    case object Info extends MessageLevel
-    case object Warn extends MessageLevel
-    case object Error extends MessageLevel
-  }
-
   class HttpLogger(config: HttpLoggerConfig) extends AbstractUnderlyingLogger {
     import config._
     @inline private final def log(level: MessageLevel, src: String, msg: String): Unit = log(level, src, msg, null)

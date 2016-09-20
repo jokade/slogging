@@ -114,6 +114,16 @@ object LogLevel extends Enumeration {
   val TRACE = Value(5)
 }
 
+/** Level of a given logging message */
+sealed trait MessageLevel
+object MessageLevel {
+  case object Trace extends MessageLevel
+  case object Debug extends MessageLevel
+  case object Info extends MessageLevel
+  case object Warn extends MessageLevel
+  case object Error extends MessageLevel
+}
+
 object PrintLogger extends AbstractUnderlyingLogger {
   import LoggingUtils.formatMessage
   private var _printLoggerName: Boolean = true
