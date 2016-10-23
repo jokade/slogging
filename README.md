@@ -1,6 +1,5 @@
 slogging
 ========
-[![Scala.js](https://www.scala-js.org/assets/badges/scalajs-0.6.9.svg)](https://www.scala-js.org)
 [![Build Status](https://travis-ci.org/jokade/slogging.svg?branch=master)](https://travis-ci.org/jokade/slogging)
 
 A simple logging library for Scala and [Scala.js](http://www.scala-js.org). Slogging is compatible to the [scala-logging](https://github.com/typesafehub/scala-logging) (and slf4j) API, and uses macros to check if logging statements should be executed.
