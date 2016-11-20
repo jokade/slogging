@@ -24,7 +24,7 @@ lazy val slogging = crossProject.in(file(".")).
   settings(
     name := "slogging",
     libraryDependencies ++= Seq(
-      "org.scala-lang" % "scala-reflect" % "2.11.7",
+      "org.scala-lang" % "scala-reflect" % scalaVersion.value,
       "com.lihaoyi" %%% "utest" % "0.4.4" % "test"
     ),
     testFrameworks += new TestFramework("utest.runner.Framework")
