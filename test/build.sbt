@@ -1,7 +1,7 @@
-val sloggingVersion = "0.5.0"
+val sloggingVersion = "0.5.2"
 
 lazy val commonSettings = Seq(
-  scalaVersion := "2.11.8",
+  scalaVersion := "2.12.0",
   scalacOptions ++= Seq("-deprecation","-unchecked","-feature","-Xlint"),
   publish := {},
   publishLocal := {},

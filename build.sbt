@@ -1,9 +1,10 @@
 
 lazy val commonSettings = Seq(
   organization := "biz.enef",
-  version := "0.5.1",
+  version := "0.5.2",
   scalaVersion := "2.11.8",
-  scalacOptions ++= Seq("-deprecation","-unchecked","-feature","-Xlint")
+  scalacOptions ++= Seq("-deprecation","-unchecked","-feature","-Xlint"),
+  crossScalaVersions := Seq("2.11.8", "2.12.0")
 )
 
 lazy val root = project.in(file(".")).
@@ -23,8 +24,8 @@ lazy val slogging = crossProject.in(file(".")).
   settings(
     name := "slogging",
     libraryDependencies ++= Seq(
-      "org.scala-lang" % "scala-reflect" % "2.11.7",
-      "com.lihaoyi" %%% "utest" % "0.4.3" % "test"
+      "org.scala-lang" % "scala-reflect" % scalaVersion.value,
+      "com.lihaoyi" %%% "utest" % "0.4.4" % "test"
     ),
     testFrameworks += new TestFramework("utest.runner.Framework")
   ).
@@ -63,7 +64,7 @@ lazy val http = project.
   settings(publishingSettings:_*).
   settings(
     name := "slogging-http",
-    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.8.0"
+    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.1"
   )
 
 
