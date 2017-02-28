@@ -18,6 +18,10 @@ lazy val root = project.in(file(".")).
     resolvers += Resolver.sonatypeRepo("releases")
   )
 
+lazy val sloggingOsgiSettings = osgiSettings ++ Seq(
+  OsgiKeys.exportPackage := Seq("slogging.*;version=${Bundle-Version}")
+)
+
 lazy val slogging = crossProject.in(file(".")).
   settings(commonSettings:_*).
   settings(publishingSettings:_*).
@@ -34,7 +38,8 @@ lazy val slogging = crossProject.in(file(".")).
   jsSettings(
     //preLinkJSEnv := NodeJSEnv().value,
     //postLinkJSEnv := NodeJSEnv().value
-  )
+  ).
+  enablePlugins(SbtOsgi).settings(sloggingOsgiSettings:_*)
 
 lazy val sloggingJVM = slogging.jvm
 lazy val sloggingJS = slogging.js
@@ -46,7 +51,8 @@ lazy val slf4j = project.
   settings(
     name := "slogging-slf4j",
     libraryDependencies += "org.slf4j" % "slf4j-api" % "1.7.12"
-  )
+  ).
+  enablePlugins(SbtOsgi).settings(sloggingOsgiSettings:_*)
 
 lazy val winston = project.
   dependsOn(sloggingJS).
