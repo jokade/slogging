@@ -1,10 +1,10 @@
 
 lazy val commonSettings = Seq(
   organization := "biz.enef",
-  version := "0.5.2",
+  version := "0.5.3-SNAPSHOT",
   scalaVersion := "2.11.8",
   scalacOptions ++= Seq("-deprecation","-unchecked","-feature","-Xlint"),
-  crossScalaVersions := Seq("2.11.8", "2.12.0")
+  crossScalaVersions := Seq("2.11.8", "2.12.1")
 )
 
 lazy val root = project.in(file(".")).

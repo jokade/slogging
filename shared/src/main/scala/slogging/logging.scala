@@ -22,6 +22,7 @@ trait LazyLogging extends LoggerHolder {
   protected lazy val logger = LoggerFactory.getLogger(loggerName)
 }
 
+
 /**
  * Defines `logger` as a value initialized with an [[UnderlyingLogger]]
  * named according to the class into which this trait is mixed
