@@ -4,7 +4,7 @@ slogging
 
 A simple logging library for Scala and [Scala.js](http://www.scala-js.org). Slogging is compatible to the [scala-logging](https://github.com/typesafehub/scala-logging) (and slf4j) API, and uses macros to check if logging statements should be executed.
 
-**News:** Version 0.5.2 has been released ([release notes](https://github.com/jokade/slogging/wiki/Release-Notes))!
+**News:** Version 0.5.3 has been released ([release notes](https://github.com/jokade/slogging/wiki/Release-Notes))!
 
 #### Contents:
 * [Getting Started](#getting-started)
@@ -29,31 +29,31 @@ Add one of the following lines to your `build.sbt` (depending on your target):
 
 **Scala/JVM** with logging to stdout:
 ```scala
-libraryDependencies += "biz.enef" %% "slogging" % "0.5.2"
+libraryDependencies += "biz.enef" %% "slogging" % "0.5.3"
 ```
 with slf4j:
 ```scala
 libraryDependencies ++= Seq(
-  "biz.enef" %% "slogging-slf4j" % "0.5.2",
+  "biz.enef" %% "slogging-slf4j" % "0.5.3",
   "org.slf4j" % "slf4j-simple" % "1.7.+"  // or another slf4j implementation
 )
 ```
 
 **Scala.js** with logging to console:
 ```scala
-libraryDependencies += "biz.enef" %%% "slogging" % "0.5.2"
+libraryDependencies += "biz.enef" %%% "slogging" % "0.5.3"
 ```
 with [winston](https://www.npmjs.com/package/winston) (Node.js):
 ```scala
-libraryDependencies += "biz.enef" %%% "slogging-winston" % "0.5.2"
+libraryDependencies += "biz.enef" %%% "slogging-winston" % "0.5.3"
 ```
 with remote logging via HTTP POST:
 ```scala
-libraryDependencies += "biz.enef" %%% "slogging-http" % "0.5.2"
+libraryDependencies += "biz.enef" %%% "slogging-http" % "0.5.3"
 ```
 
-slogging 0.5.2 is published for both Scala 2.11.x and Scala 2.12.0 and
-Scala.js 0.6.13+.
+slogging 0.5.3 is published for both Scala 2.11.x and Scala 2.12.x and
+Scala.js 0.6.18+.
 
 ### Logging and Configuration
 #### Add logging statements
@@ -211,7 +211,11 @@ A wrapper around the [winston](https://www.npmjs.com/package/winston) logging li
 ```scala
 // build.sbt
 libraryDependencies += "biz.enef" %%% "slogging-winston" % "VERSION"
+
+// activate module support to load winston module
+scalaJSModuleKind := ModuleKind.CommonJSModule
 ```
+
 ```scala
 import slogging._
 
