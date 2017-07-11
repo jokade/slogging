@@ -7,26 +7,32 @@ package slogging
 
 import slogging.WinstonLoggerFactory.WinstonLogger
 
-import scalajs.js
-import js.Dynamic
+import scala.scalajs.js
+import scala.scalajs.js.annotation.JSImport
 
 object WinstonLoggerFactory {
-  val winston = Dynamic.global.require("winston")
-  private lazy val _default = new WinstonLoggerFactory(WinstonLogger())
+  private lazy val _default = new WinstonLoggerFactory(DefaultLogger)
 
   def apply() : UnderlyingLoggerFactory = _default
   def apply(wlogger: WinstonLogger) : UnderlyingLoggerFactory = new WinstonLoggerFactory(wlogger)
+  def apply(config: js.Dynamic) : UnderlyingLoggerFactory = new WinstonLoggerFactory(new CustomLogger(config))
 
   @js.native
   trait WinstonLogger extends js.Object {
     def log(level: String, msg: String): Unit = js.native
   }
-  object WinstonLogger {
-    def apply() : WinstonLogger = winston.asInstanceOf[WinstonLogger]
-    def apply(config: js.Dynamic) : WinstonLogger = js.Dynamic.newInstance(winston.Logger)(config).asInstanceOf[WinstonLogger]
+
+  @js.native
+  @JSImport("winston","Logger","winston.Logger")
+  class CustomLogger(config: js.UndefOr[js.Dynamic] = js.undefined) extends WinstonLogger {
   }
 
+  @js.native
+  @JSImport("winston",JSImport.Namespace,"winston")
+  object DefaultLogger extends WinstonLogger
+
 }
+
 
 class WinstonLoggerFactory(_logger: WinstonLogger) extends UnderlyingLoggerFactory {
   import LoggingUtils.formatMessage

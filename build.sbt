@@ -1,10 +1,10 @@
 
 lazy val commonSettings = Seq(
   organization := "biz.enef",
-  version := "0.5.3-SNAPSHOT",
-  scalaVersion := "2.11.8",
+  version := "0.5.3",
+  scalaVersion := "2.11.11",
   scalacOptions ++= Seq("-deprecation","-unchecked","-feature","-Xlint"),
-  crossScalaVersions := Seq("2.11.8", "2.12.1")
+  crossScalaVersions := Seq("2.11.11", "2.12.2")
 )
 
 lazy val root = project.in(file(".")).
@@ -57,8 +57,9 @@ lazy val slf4j = project.
 lazy val winston = project.
   dependsOn(sloggingJS).
   enablePlugins(ScalaJSPlugin).
-  settings(commonSettings:_*).
-  settings(publishingSettings:_*).
+  settings(
+    commonSettings ++
+    publishingSettings :_*).
   settings(
     name := "slogging-winston"
   )
@@ -66,8 +67,8 @@ lazy val winston = project.
 lazy val http = project.
   dependsOn(sloggingJS).
   enablePlugins(ScalaJSPlugin).
-  settings(commonSettings:_*).
-  settings(publishingSettings:_*).
+  settings(commonSettings ++
+    publishingSettings:_*).
   settings(
     name := "slogging-http",
     libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.1"
