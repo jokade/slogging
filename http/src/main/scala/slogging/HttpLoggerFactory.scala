@@ -16,7 +16,7 @@ object HttpLoggerFactory {
   def apply(url: String, clientId: String = "", formatter: MessageFormatter = defaultFormatter) : HttpLoggerFactory =
     new HttpLoggerFactory( HttpLoggerConfig(url,clientId,formatter) )
 
-  private def sendMessage(url: String, msg: js.Object) : Unit = Ajax.post(url,JSON.stringify(msg))
+  private def sendMessage(url: String, msg: js.Object) : Unit = Ajax.post(url,JSON.stringify(msg),headers = Map("Content-Type"->"application/json"))
 
   /**
    * Parameters:

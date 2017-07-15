@@ -1,7 +1,7 @@
-val sloggingVersion = "0.5.3-SNAPSHOT"
+val sloggingVersion = "0.5.4-SNAPSHOT"
 
 lazy val commonSettings = Seq(
-  scalaVersion := "2.12.0",
+  scalaVersion := "2.11.11",
   scalacOptions ++= Seq("-deprecation","-unchecked","-feature","-Xlint"),
   publish := {},
   publishLocal := {},
@@ -40,4 +40,12 @@ lazy val tests = crossProject.in(file(".")).
 lazy val testsJVM = tests.jvm
 lazy val testsJS = tests.js
 
-
+lazy val web = project
+  .enablePlugins(ScalaJSPlugin)
+  .settings(commonSettings:_*)
+  .settings(
+    scalaJSUseMainModuleInitializer := true,
+    libraryDependencies ++= Seq(
+      "biz.enef" %%% "slogging-http" % sloggingVersion
+    )
+  )
