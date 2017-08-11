@@ -5,7 +5,12 @@
 // Distributed under the MIT License (see included file LICENSE)
 package slogging
 
-final class MultiLogger(loggers: Iterable[UnderlyingLogger]) extends AbstractUnderlyingLogger {
+final class MultiLogger(loggers: Iterable[UnderlyingLogger]) extends UnderlyingLogger {
+  @inline def isErrorEnabled: Boolean = LoggerConfig.level >= LogLevel.ERROR
+  @inline def isWarnEnabled: Boolean = LoggerConfig.level >= LogLevel.WARN
+  @inline def isInfoEnabled: Boolean = LoggerConfig.level >= LogLevel.INFO
+  @inline def isDebugEnabled: Boolean = LoggerConfig.level >= LogLevel.DEBUG
+  @inline def isTraceEnabled: Boolean = LoggerConfig.level >= LogLevel.TRACE
 
   override def error(source: String, message: String): Unit = loggers.foreach(_.error(source,message))
   override def error(source: String, message: String, cause: Throwable): Unit = loggers.foreach(_.error(source,message,cause))

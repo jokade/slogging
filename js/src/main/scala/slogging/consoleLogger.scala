@@ -54,6 +54,7 @@ object ConsoleLogger extends AbstractUnderlyingLogger {
   override def trace(source: String, message: String): Unit = console.trace(msg("TRACE",source,message))
   override def trace(source: String, message: String, cause: Throwable): Unit = console.trace(msg("TRACE",source,message,cause))
   override def trace(source: String, message: String, args: Any*): Unit = console.trace(msg("TRACE",source,message,args:_*))
+
 }
 
 object ConsoleLoggerFactory extends UnderlyingLoggerFactory {
