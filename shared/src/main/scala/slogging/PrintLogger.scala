@@ -16,7 +16,7 @@ object PrintLogger extends LoggerTemplate {
     case MessageLevel.Info => infoStream
     case MessageLevel.Debug => debugStream
     case MessageLevel.Trace => traceStream
-  }).print(formatter.formatMessage(level,name,message,cause))
+  }).println(formatter.formatMessage(level,name,message,cause))
 }
 
 object PrintLoggerFactory extends UnderlyingLoggerFactory {

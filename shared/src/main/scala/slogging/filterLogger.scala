@@ -13,7 +13,7 @@ object FilterLogger {
    * A PartialFunction that receives the log level and source of the logging message
    * and returns the Logger to be used. __Must be defined for all inputs__!
    */
-  type Filter = PartialFunction[(LogLevel.Value,String),UnderlyingLogger]
+  type Filter = PartialFunction[(LogLevel,String),UnderlyingLogger]
   val nullFilter: Filter = { case _ => NullLogger }
   private var _filter: Filter = nullFilter
 

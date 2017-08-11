@@ -1,14 +1,16 @@
+// (5) shadow sbt-scalajs' crossProject and CrossType until Scala.js 1.0.0 is released
+import sbtcrossproject.{crossProject, CrossType}
 
 lazy val commonSettings = Seq(
   organization := "biz.enef",
   version := "0.6.0-SNAPSHOT",
   scalaVersion := "2.11.11",
-  scalacOptions ++= Seq("-deprecation","-unchecked","-feature","-Xlint"),
-  crossScalaVersions := Seq("2.11.11", "2.12.2")
+  scalacOptions ++= Seq("-deprecation","-unchecked","-feature","-Xlint")
+  //crossScalaVersions := Seq("2.11.11", "2.12.2")
 )
 
 lazy val root = project.in(file(".")).
-  aggregate(sloggingJVM,sloggingJS,slf4j,winston,http).
+  aggregate(sloggingJVM,sloggingJS,sloggingNative,slf4j,winston,http).
   settings(commonSettings:_*).
   //settings(sonatypeSettings: _*).
   settings(
@@ -22,27 +24,30 @@ lazy val sloggingOsgiSettings = osgiSettings ++ Seq(
   OsgiKeys.exportPackage := Seq("slogging.*;version=${Bundle-Version}")
 )
 
-lazy val slogging = crossProject.in(file(".")).
-  settings(commonSettings:_*).
-  settings(publishingSettings:_*).
-  settings(
+lazy val slogging = crossProject(JSPlatform, JVMPlatform, NativePlatform)
+  .crossType(CrossType.Full)
+  .in(file("."))
+  .settings(commonSettings:_*)
+  .settings(publishingSettings:_*)
+  .settings(
     name := "slogging",
     libraryDependencies ++= Seq(
       "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-      "com.lihaoyi" %%% "utest" % "0.4.4" % "test"
+      "com.lihaoyi" %%% "utest" % "0.4.8" % "test"
     ),
     testFrameworks += new TestFramework("utest.runner.Framework")
-  ).
-  jvmSettings(
-  ).
-  jsSettings(
+  )
+  .jvmSettings(
+  )
+  .jsSettings(
     //preLinkJSEnv := NodeJSEnv().value,
     //postLinkJSEnv := NodeJSEnv().value
-  ).
-  enablePlugins(SbtOsgi).settings(sloggingOsgiSettings:_*)
+  )
+  .enablePlugins(SbtOsgi).settings(sloggingOsgiSettings:_*)
 
-lazy val sloggingJVM = slogging.jvm
-lazy val sloggingJS = slogging.js
+lazy val sloggingJVM    = slogging.jvm
+lazy val sloggingJS     = slogging.js
+lazy val sloggingNative = slogging.native
 
 lazy val slf4j = project.
   dependsOn(sloggingJVM).

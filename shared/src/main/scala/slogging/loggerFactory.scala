@@ -164,9 +164,9 @@ object MessageFormatter {
 
     override def formatPrefix(level: MessageLevel, name: String): String =
       if(printTimestamp) {
-        if(printName) s"[$getTimestamp, $level, $name]" else s"[$getTimestamp, $level]"
+        if(printName) s"[$getTimestamp, $level, $name] " else s"[$getTimestamp, $level] "
       } else {
-        if(printName) s"[$level, $name]" else s"[$level]"
+        if(printName) s"[$level, $name] " else s"[$level] "
       }
   }
 
