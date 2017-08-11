@@ -11,11 +11,11 @@ object PrintLogger extends LoggerTemplate {
   import PrintLoggerFactory._
 
   final override def logMessage(level: MessageLevel, name: String, message: String, cause: Option[Throwable]): Unit = (level match {
-    case MessageLevel.Error => errorStream
-    case MessageLevel.Warn => warnStream
-    case MessageLevel.Info => infoStream
-    case MessageLevel.Debug => debugStream
-    case MessageLevel.Trace => traceStream
+    case MessageLevel.`error` => errorStream
+    case MessageLevel.`warn` => warnStream
+    case MessageLevel.`info` => infoStream
+    case MessageLevel.`debug` => debugStream
+    case MessageLevel.`trace` => traceStream
   }).println(formatter.formatMessage(level,name,message,cause))
 }
 

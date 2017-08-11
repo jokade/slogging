@@ -75,25 +75,25 @@ abstract class LoggerTemplate extends AbstractUnderlyingLogger {
   @inline private final def log(level: MessageLevel, src: String, msg: String, args: Any*): Unit = log(level, src, String.format(msg, args), None)
   @inline private final def log(level: MessageLevel, src: String, msg: String, cause: Option[Throwable]): Unit = logMessage(level, src, msg, cause)
 
-  final def error(source: String, message: String): Unit = log(MessageLevel.Error, source, message)
-  final def error(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.Error, source, message, cause)
-  final def error(source: String, message: String, args: Any*): Unit = log(MessageLevel.Error, source, message, args)
+  final def error(source: String, message: String): Unit = log(MessageLevel.error, source, message)
+  final def error(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.error, source, message, cause)
+  final def error(source: String, message: String, args: Any*): Unit = log(MessageLevel.error, source, message, args)
 
-  final def warn(source: String, message: String): Unit = log(MessageLevel.Warn, source,message)
-  final def warn(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.Warn, source, message, cause)
-  final def warn(source: String, message: String, args: Any*): Unit = log(MessageLevel.Warn, source, message, args)
+  final def warn(source: String, message: String): Unit = log(MessageLevel.warn, source,message)
+  final def warn(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.warn, source, message, cause)
+  final def warn(source: String, message: String, args: Any*): Unit = log(MessageLevel.warn, source, message, args)
 
-  final def info(source: String, message: String): Unit = log(MessageLevel.Info, source,message)
-  final def info(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.Info, source, message, cause)
-  final def info(source: String, message: String, args: Any*): Unit = log(MessageLevel.Info, source, message, args)
+  final def info(source: String, message: String): Unit = log(MessageLevel.info, source,message)
+  final def info(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.info, source, message, cause)
+  final def info(source: String, message: String, args: Any*): Unit = log(MessageLevel.info, source, message, args)
 
-  final def debug(source: String, message: String): Unit = log(MessageLevel.Debug, source,message)
-  final def debug(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.Debug, source, message, cause)
-  final def debug(source: String, message: String, args: Any*): Unit = log(MessageLevel.Debug, source, message, args)
+  final def debug(source: String, message: String): Unit = log(MessageLevel.debug, source,message)
+  final def debug(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.debug, source, message, cause)
+  final def debug(source: String, message: String, args: Any*): Unit = log(MessageLevel.debug, source, message, args)
 
-  final def trace(source: String, message: String): Unit = log(MessageLevel.Trace, source,message)
-  final def trace(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.Trace, source, message, cause)
-  final def trace(source: String, message: String, args: Any*): Unit = log(MessageLevel.Trace, source, message, args)
+  final def trace(source: String, message: String): Unit = log(MessageLevel.trace, source,message)
+  final def trace(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.trace, source, message, cause)
+  final def trace(source: String, message: String, args: Any*): Unit = log(MessageLevel.trace, source, message, args)
 
   /**
    * @param level Message level
@@ -113,11 +113,11 @@ trait UnderlyingLoggerFactory {
 /** Level of a given logging message */
 sealed trait MessageLevel
 object MessageLevel {
-  case object Trace extends MessageLevel
-  case object Debug extends MessageLevel
-  case object Info extends MessageLevel
-  case object Warn extends MessageLevel
-  case object Error extends MessageLevel
+  case object trace extends MessageLevel
+  case object debug extends MessageLevel
+  case object info extends MessageLevel
+  case object warn extends MessageLevel
+  case object error extends MessageLevel
 }
 
 

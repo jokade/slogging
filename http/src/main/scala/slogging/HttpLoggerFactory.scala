@@ -32,7 +32,7 @@ object HttpLoggerFactory {
 
   val defaultFormatter: MessageFormatter = (clientId,level,name,msg,cause) => js.Dynamic.literal(
     clientId = clientId,
-    level = level match { case MessageLevel.Trace => "trace" case MessageLevel.Debug => "debug" case MessageLevel.Info => "info" case MessageLevel.Warn => "warn" case MessageLevel.Error => "error" },
+    level = level match { case MessageLevel.`trace` => "trace" case MessageLevel.`debug` => "debug" case MessageLevel.`info` => "info" case MessageLevel.`warn` => "warn" case MessageLevel.`error` => "error" },
     name = name,
     msg = msg,
     cause = if(cause==null) "" else cause.toString
