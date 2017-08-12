@@ -22,7 +22,7 @@ object TerminalLogger extends LoggerTemplate {
         fprintf(stderr,c"%s%s%s\n",infoCode,msg,defaultCode)
       case MessageLevel.debug =>
         fprintf(stderr,c"%s%s%s\n",debugCode,msg,defaultCode)
-      case MessageLevel.debug =>
+      case MessageLevel.trace =>
         fprintf(stderr,c"%s%s%s\n",traceCode,msg,defaultCode)
     }
   }

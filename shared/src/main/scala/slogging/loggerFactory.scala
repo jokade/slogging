@@ -72,28 +72,28 @@ abstract class AbstractUnderlyingLogger extends UnderlyingLogger {
 abstract class LoggerTemplate extends AbstractUnderlyingLogger {
 
   @inline private final def log(level: MessageLevel, src: String, msg: String): Unit = log(level, src, msg, None)
-  @inline private final def log(level: MessageLevel, src: String, msg: String, args: Any*): Unit = log(level, src, String.format(msg, args), None)
+  @inline private final def log(level: MessageLevel, src: String, msg: String, args: Any*): Unit = log(level, src, LoggerConfig.argsFormatter(msg, args), None)
   @inline private final def log(level: MessageLevel, src: String, msg: String, cause: Option[Throwable]): Unit = logMessage(level, src, msg, cause)
 
   final def error(source: String, message: String): Unit = log(MessageLevel.error, source, message)
   final def error(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.error, source, message, cause)
-  final def error(source: String, message: String, args: Any*): Unit = log(MessageLevel.error, source, message, args)
+  final def error(source: String, message: String, args: Any*): Unit = log(MessageLevel.error, source, message, args:_*)
 
   final def warn(source: String, message: String): Unit = log(MessageLevel.warn, source,message)
   final def warn(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.warn, source, message, cause)
-  final def warn(source: String, message: String, args: Any*): Unit = log(MessageLevel.warn, source, message, args)
+  final def warn(source: String, message: String, args: Any*): Unit = log(MessageLevel.warn, source, message, args:_*)
 
   final def info(source: String, message: String): Unit = log(MessageLevel.info, source,message)
   final def info(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.info, source, message, cause)
-  final def info(source: String, message: String, args: Any*): Unit = log(MessageLevel.info, source, message, args)
+  final def info(source: String, message: String, args: Any*): Unit = log(MessageLevel.info, source, message, args:_*)
 
   final def debug(source: String, message: String): Unit = log(MessageLevel.debug, source,message)
   final def debug(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.debug, source, message, cause)
-  final def debug(source: String, message: String, args: Any*): Unit = log(MessageLevel.debug, source, message, args)
+  final def debug(source: String, message: String, args: Any*): Unit = log(MessageLevel.debug, source, message, args:_*)
 
   final def trace(source: String, message: String): Unit = log(MessageLevel.trace, source,message)
   final def trace(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.trace, source, message, cause)
-  final def trace(source: String, message: String, args: Any*): Unit = log(MessageLevel.trace, source, message, args)
+  final def trace(source: String, message: String, args: Any*): Unit = log(MessageLevel.trace, source, message, args:_*)
 
   /**
    * @param level Message level
@@ -124,7 +124,14 @@ object MessageLevel {
 object LoggingUtils {
 
   // TODO: optimize?
-  def formatMessage(msg: String, args: Seq[Any]) : String =
+  /**
+   * Replaces `{}` in `msg` with the args.
+   *
+   * @param msg message to be filled with arguments
+   * @param args arguments
+   * @return
+   */
+  def argsBracketFormat(msg: String, args: Seq[Any]) : String =
     if(args.isEmpty) msg
     else {
       @annotation.tailrec
@@ -140,6 +147,9 @@ object LoggingUtils {
 
       loop("",msg.toList,args)
     }
+
+//  @inline
+  def argsStringFormat(msg: String, args: Seq[Any]): String = String.format(msg,args.asInstanceOf[Seq[Object]]:_*)
 }
 
 trait MessageFormatter {

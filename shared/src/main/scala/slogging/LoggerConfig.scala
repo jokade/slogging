@@ -20,12 +20,18 @@ object LogLevel  {
 
 object LoggerConfig {
   type LoggingHook = Function3[LogLevel,String,String,Unit]
+  type ArgsFormatter = Function2[String,Seq[Any],String]
 
   val defaultHook: LoggingHook = (_,_,_) => {}
 
   private var _factory : UnderlyingLoggerFactory = NullLoggerFactory
   private var _level : LogLevel = LogLevel.INFO
   private var _errorHook = defaultHook
+  private var _argsFormatter: ArgsFormatter = LoggingUtils.argsBracketFormat
+
+  @inline
+  def argsFormatter: ArgsFormatter = _argsFormatter
+  def argsFormatter_(f: ArgsFormatter): Unit = this.synchronized{ this._argsFormatter = f }
 
   @inline
   def factory: UnderlyingLoggerFactory = _factory

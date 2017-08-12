@@ -13,13 +13,13 @@ object LoggingUtilsTest extends TestSuite {
   val tests = TestSuite{
 
     'formatMessage-{
-      assert( formatMessage("simple message",Nil) == "simple message" )
-      assert( formatMessage("int {}",Seq(42).asInstanceOf[Seq[AnyRef]]) == "int 42" )
-      assert( formatMessage("int {}: {}",Seq(42,true).asInstanceOf[Seq[AnyRef]]) == "int 42: true" )
-      assert( formatMessage("{}",Seq(42).asInstanceOf[Seq[AnyRef]]) == "42" )
-      assert( formatMessage("{}",Nil) == "{}" )
-      assert( formatMessage("{}, {}",Seq(42).asInstanceOf[Seq[AnyRef]]) == "42, {}" )
-      assert( formatMessage("message: {},{},{}",Seq(1,2,3)) == "message: 1,2,3")
+      assert( argsBracketFormat("simple message",Nil) == "simple message" )
+      assert( argsBracketFormat("int {}",Seq(42).asInstanceOf[Seq[AnyRef]]) == "int 42" )
+      assert( argsBracketFormat("int {}: {}",Seq(42,true).asInstanceOf[Seq[AnyRef]]) == "int 42: true" )
+      assert( argsBracketFormat("{}",Seq(42).asInstanceOf[Seq[AnyRef]]) == "42" )
+      assert( argsBracketFormat("{}",Nil) == "{}" )
+      assert( argsBracketFormat("{}, {}",Seq(42).asInstanceOf[Seq[AnyRef]]) == "42, {}" )
+      assert( argsBracketFormat("message: {},{},{}",Seq(1,2,3)) == "message: 1,2,3")
     }
   }
 }

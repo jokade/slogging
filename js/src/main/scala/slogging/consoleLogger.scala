@@ -14,7 +14,7 @@ import scalajs.js.Dynamic.global
  *
  */
 object ConsoleLogger extends AbstractUnderlyingLogger {
-  import LoggingUtils.formatMessage
+  import LoggingUtils.argsBracketFormat
   private var _printLoggerName = true
   /**
    * If true, all logger outputs are prefixed by the logger name
@@ -32,7 +32,7 @@ object ConsoleLogger extends AbstractUnderlyingLogger {
   @inline
   final def msg(level: String, src: String, msg: String, cause: Throwable) = s"${prefix(level,src)} $msg\n    $cause"
   @inline
-  final def msg(level: String, src: String, msg: String, args: Any*) = s"${prefix(level,src)} ${formatMessage(msg,args)}"
+  final def msg(level: String, src: String, msg: String, args: Any*) = s"${prefix(level,src)} ${argsBracketFormat(msg,args)}"
 
 
   override def error(source: String, message: String): Unit = console.error(msg("ERROR",source,message))

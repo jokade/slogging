@@ -35,7 +35,7 @@ object WinstonLoggerFactory {
 
 
 class WinstonLoggerFactory(_logger: WinstonLogger) extends UnderlyingLoggerFactory {
-  import LoggingUtils.formatMessage
+  import LoggingUtils.argsBracketFormat
   private val logger = new WinstonLoggerImpl(_logger)
   override def getUnderlyingLogger(name: String): UnderlyingLogger =  logger
 
@@ -47,7 +47,7 @@ class WinstonLoggerFactory(_logger: WinstonLogger) extends UnderlyingLoggerFacto
     @inline
     def msg(level: String, src: String, msg: String, cause: Throwable) = s"${prefix(level,src)} $msg\n    $cause"
     @inline
-    def msg(level: String, src: String, msg: String, args: Any*) = s"${prefix(level,src)} ${formatMessage(msg,args)}"
+    def msg(level: String, src: String, msg: String, args: Any*) = s"${prefix(level,src)} ${argsBracketFormat(msg,args)}"
 
 
     override def error(source: String, message: String): Unit = l.log("error",msg("error",source,message))
