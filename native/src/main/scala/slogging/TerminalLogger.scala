@@ -29,39 +29,51 @@ object TerminalLogger extends LoggerTemplate {
 }
 
 object TerminalLoggerFactory extends UnderlyingLoggerFactory {
+  type TerminalControlCode = CString
 
-  private var _defaultCode: CString = c"\33[39m"
-  private var _errorCode: CString   = c"\33[31m"
-  private var _warnCode: CString    = c"\33[33m"
-  private var _infoCode: CString    = c"\33[39m"
-  private var _debugCode: CString   = c"\33[39m"
-  private var _traceCode: CString   = c"\33[39m"
+  private var _defaultCode: TerminalControlCode = TerminalControlCode.default
+  private var _errorCode: TerminalControlCode   = TerminalControlCode.red
+  private var _warnCode: TerminalControlCode    = TerminalControlCode.yellow
+  private var _infoCode: TerminalControlCode    = TerminalControlCode.default
+  private var _debugCode: TerminalControlCode   = TerminalControlCode.default
+  private var _traceCode: TerminalControlCode   = TerminalControlCode.default
 
   private var _formatter: MessageFormatter = MessageFormatter.default
 
-  @inline
-  final def defaultCode: CString = _defaultCode
-  final def defaultCode_(c: CString): Unit = this.synchronized{ _defaultCode = c }
+  object TerminalControlCode {
+    val default: TerminalControlCode = c"\33[39m"
+    val red: TerminalControlCode     = c"\33[31m"
+    val green: TerminalControlCode   = c"\33[32m"
+    val yellow: TerminalControlCode  = c"\33[33m"
+    val blue: TerminalControlCode    = c"\33[34m"
+    val magenta: TerminalControlCode = c"\33[35m"
+    val cyan: TerminalControlCode    = c"\33[36m"
+    val white: TerminalControlCode   = c"\33[37m"
+  }
 
   @inline
-  final def errorCode: CString = _errorCode
-  final def errorCode_(c: CString): Unit = this.synchronized{ _errorCode = c }
+  final def defaultCode: TerminalControlCode = _defaultCode
+  final def defaultCode_=(c: TerminalControlCode): Unit = this.synchronized{ _defaultCode = c }
 
   @inline
-  final def warnCode: CString = _warnCode
-  final def warnCode_(c: CString): Unit = this.synchronized{ _warnCode = c }
+  final def errorCode: TerminalControlCode = _errorCode
+  final def errorCode_=(c: TerminalControlCode): Unit = this.synchronized{ _errorCode = c }
 
   @inline
-  final def infoCode: CString = _infoCode
-  final def infoCode_(c: CString): Unit = this.synchronized{ _infoCode = c }
+  final def warnCode: TerminalControlCode = _warnCode
+  final def warnCode_=(c: TerminalControlCode): Unit = this.synchronized{ _warnCode = c }
 
   @inline
-  final def debugCode: CString = _debugCode
-  final def debugCode_(c: CString): Unit = this.synchronized{ _debugCode = c }
+  final def infoCode: TerminalControlCode = _infoCode
+  final def infoCode_=(c: TerminalControlCode): Unit = this.synchronized{ _infoCode = c }
 
   @inline
-  final def traceCode: CString = _traceCode
-  final def traceCode_(c: CString): Unit = this.synchronized{ _traceCode = c }
+  final def debugCode: TerminalControlCode = _debugCode
+  final def debugCode_=(c: TerminalControlCode): Unit = this.synchronized{ _debugCode = c }
+
+  @inline
+  final def traceCode: TerminalControlCode = _traceCode
+  final def traceCode_=(c: TerminalControlCode): Unit = this.synchronized{ _traceCode = c }
 
   @inline
   final def formatter: MessageFormatter = _formatter
