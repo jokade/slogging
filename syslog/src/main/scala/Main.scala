@@ -8,8 +8,10 @@ object Main extends LazyLogging {
   def main(args: Array[String]): Unit = {
     LoggerConfig.factory = SyslogLoggerFactory()
     LoggerConfig.level = LogLevel.TRACE
-    logger.error("ERROR!")
-    logger.warn("warn...")
-    logger.info("why?")
+    logger.error("ERROR")
+    logger.warn("WARN")
+    logger.info("INFO")
+    logger.debug("DEBUG")
+    logger.trace("TRACE")
   }
 }
