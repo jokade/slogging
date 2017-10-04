@@ -79,6 +79,15 @@ lazy val http = project.
     libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.1"
   )
 
+lazy val syslog = project
+  .dependsOn(sloggingNative)
+  .enablePlugins(ScalaNativePlugin)
+  .settings(
+    commonSettings ++
+    publishingSettings :_*)
+  .settings(
+    name := "slogging-syslog"
+  )
 
 lazy val publishingSettings = Seq(
   publishMavenStyle := true,
