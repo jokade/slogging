@@ -4,7 +4,7 @@ slogging
 
 A simple logging library for Scala and [Scala.js](http://www.scala-js.org). Slogging is compatible to the [scala-logging](https://github.com/typesafehub/scala-logging) (and slf4j) API, and uses macros to check if logging statements should be executed.
 
-**News:** Version 0.5.3 has been released ([release notes](https://github.com/jokade/slogging/wiki/Release-Notes))!
+**News:** Version 0.6.0 has been released ([release notes](https://github.com/jokade/slogging/wiki/Release-Notes))!
 
 #### Contents:
 * [Getting Started](#getting-started)
@@ -12,14 +12,16 @@ A simple logging library for Scala and [Scala.js](http://www.scala-js.org). Slog
   * [Logging and Configuration](#logging-and-configuration)
   * [FilterLogger](#filterlogger)
 * [Backends](#backends)
+  * [PrintLogger](#printlogger)
   * [Scala / JVM](#scala--jvm)
-    * [PrintLogger](#printloggerfactory)
     * [SLF4J](#slf4jloggerfactory)
   * [Scala.js](#scalajs)
-    * [PrintLogger](#printloggerfactory-1)
     * [ConsoleLogger](#consoleloggerfactory)
     * [Winston (Node.js)](#winstonloggerfactory)
     * [Remote HTTP](#httploggerfactory)
+  * [Scala Native](#scala-native)
+    * [TerminalLogger](#terminallogger)
+    * [Syslog](#sysloglogger)
 
 Getting Started
 ---------------
@@ -29,31 +31,41 @@ Add one of the following lines to your `build.sbt` (depending on your target):
 
 **Scala/JVM** with logging to stdout:
 ```scala
-libraryDependencies += "biz.enef" %% "slogging" % "0.5.3"
+libraryDependencies += "biz.enef" %% "slogging" % "0.6.0"
 ```
 with slf4j:
 ```scala
 libraryDependencies ++= Seq(
-  "biz.enef" %% "slogging-slf4j" % "0.5.3",
+  "biz.enef" %% "slogging-slf4j" % "0.6.0",
   "org.slf4j" % "slf4j-simple" % "1.7.+"  // or another slf4j implementation
 )
 ```
 
 **Scala.js** with logging to console:
 ```scala
-libraryDependencies += "biz.enef" %%% "slogging" % "0.5.3"
+libraryDependencies += "biz.enef" %%% "slogging" % "0.6.0"
 ```
 with [winston](https://www.npmjs.com/package/winston) (Node.js):
 ```scala
-libraryDependencies += "biz.enef" %%% "slogging-winston" % "0.5.3"
+libraryDependencies += "biz.enef" %%% "slogging-winston" % "0.6.0"
 ```
 with remote logging via HTTP POST:
 ```scala
-libraryDependencies += "biz.enef" %%% "slogging-http" % "0.5.3"
+libraryDependencies += "biz.enef" %%% "slogging-http" % "0.6.0"
 ```
 
-slogging 0.5.3 is published for both Scala 2.11.x and Scala 2.12.x and
-Scala.js 0.6.18+.
+**Scala Native** with logging to stderr:
+```scala
+libraryDependencies += "biz.enef" %%% "slogging" % "0.6.0"
+```
+
+with logging to `syslogd`:
+```scala
+libraryDependencies += "biz.enef" %%% "slogging-syslog" % "0.6.0"
+```
+
+slogging 0.6.0 is published for both Scala 2.11.x and Scala 2.12.x,
+Scala.js 0.6.18+, and Scala Native 0.3.2+.
 
 ### Logging and Configuration
 #### Add logging statements
@@ -89,19 +101,10 @@ The default logger is a `NullLogger` which simply ignores all logging statements
 import slogging._
 
 object Main extends App {
-  // activate simple logging using println (supported by Scala/JVM and Scala.js) 
+  // select logger backend, e.g. simple logging using println (supported by Scala/JVM, Scala.js, and Scala Native) 
   LoggerConfig.factory = PrintLoggerFactory()
 
-  // - or, use SLF4J on JVM
-  // LoggerConfig.factory = SLF4JLoggerFactory()
-  
-  // - or, use console.log with Scala.js
-  // LoggerConfig.factory = ConsoleLoggerFactory()
-  
-  // - or with winston / Node.js
-  // LoggerConfig.factory = WinstonLoggerFactory()
-  
-  // set log level to DEBUG
+  // set log level, e.g. to DEBUG
   LoggerConfig.level = LogLevel.DEBUG
 }
 ```
@@ -134,10 +137,8 @@ FilterLogger.filter = {
 
 Backends
 --------
-### Scala / JVM
-slogging supports the following logger backends on Scala (JVM):
-#### PrintLoggerFactory
-A simple backend that prints all log messages to stdout.
+### PrintLogger
+This simple backend prints all messages to stderr (or stdout) and can be used with JVM, JS an Scala Native projects.
 
 **Usage:**
 ```scala
@@ -153,6 +154,31 @@ LoggerConfig.factory = PrintLoggerFactory()
 // set this to activate timestamp logging
 PrintLogger.printTimestamp = true
 ```
+You can change the output stream to which messages are logged for each level, e.g.:
+```scala
+// use stderr for ERROR and WARN
+PrintLoggerFactory.errorStream = System.err
+PrintLoggerFactory.warnStream = System.err
+
+// use stdout for all other levels
+PrintLoggerFactory.infoStream = System.out
+PrintLoggerFactory.debugStream = System.out
+PrintLoggerFactory.traceStream = System.out
+```
+
+Furthermore, you may also change the format of logging message by providing a custom `MessageFormatter`:
+```scala
+object CustomFormatter extends MessageFormater {
+  def formatMessage(level: MessageLevel, name: String, msg: String, cause: Option[Throwable]): String = {
+    /* ... */
+  }
+}
+
+PrintLoggerFactory.formatter = CustomFormatter
+```
+
+### Scala / JVM
+slogging supports the following logger backends on Scala (JVM):
 
 #### SLF4JLoggerFactory
 This backend is just a wrapper around [slf4j](http://www.slf4j.org).
@@ -174,20 +200,6 @@ LoggerConfig.factory = SLF4JFactory()
 
 ### Scala.js
 slogging support the following logger backends for Scala.js:
-#### PrintLoggerFactory
-A simple backend that prints all log messages to the console unsing Scala's `println()`.
-
-**Usage:**
-```scala
-// build.sbt
-libraryDependencies += "biz.enef" %%% "slogging" % "VERSION"
-```
-```scala
-import slogging._
-
-// activate PrintLogger; no additional configuration required
-LoggerConfig.factory = PrintLoggerFactory()
-```
 
 #### ConsoleLoggerFactory
 Similar to PrintLoggerFactory, but uses `console.log` instead of `println()`.
@@ -263,6 +275,39 @@ LoggerConfig.factory =
                     fmt         // message formatting function (optional)
                    ) 
 ```
+
+### Scala Native
+slogging supports the following logger backends on Scala Native:
+
+#### TerminalLogger
+Logs all messages to stderr using fprintf. Messages are enclosed in ANSI terminal control codes, which can be configured separately for every level.
+
+**Usage:**
+```scala
+// build.sbt
+libraryDependencies += "biz.enef" %%% "slogging" % "VERSION"
+```
+
+```scala
+// use default TerminalLogger
+// (error messages are printed in red, warnings in yellow)
+LoggerConfig.factory = WinstonLoggerFactory()
+
+// print INFO messages in blue
+TerminalLoggerFactory.infoCode = TerminalControlCode.blue
+```
+
+#### SyslogLogger
+This backend uses the standard `syslog` facility.
+
+**Usage:**
+```scala
+// build.sbt
+libraryDependencies += "biz.enef" %%% "slogging-syslog" % "VERSION"
+```
+
+```scala
+LoggerConfig.factory = SyslogLoggerFactory()
 
 License
 -------
