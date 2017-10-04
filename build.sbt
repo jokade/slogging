@@ -3,14 +3,14 @@ import sbtcrossproject.{crossProject, CrossType}
 
 lazy val commonSettings = Seq(
   organization := "biz.enef",
-  version := "0.6.0-SNAPSHOT",
+  version := "0.6.0",
   scalaVersion := "2.11.11",
   scalacOptions ++= Seq("-deprecation","-unchecked","-feature","-Xlint")
   //crossScalaVersions := Seq("2.11.11", "2.12.2")
 )
 
 lazy val root = project.in(file(".")).
-  aggregate(sloggingJVM,sloggingJS,sloggingNative,slf4j,winston,http).
+  aggregate(sloggingJVM,sloggingJS,sloggingNative,slf4j,winston,http,syslog).
   settings(commonSettings:_*).
   //settings(sonatypeSettings: _*).
   settings(
@@ -38,8 +38,10 @@ lazy val slogging = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     testFrameworks += new TestFramework("utest.runner.Framework")
   )
   .jvmSettings(
+    crossScalaVersions := Seq("2.11.11", "2.12.2")
   )
   .jsSettings(
+    crossScalaVersions := Seq("2.11.11", "2.12.2")
     //preLinkJSEnv := NodeJSEnv().value,
     //postLinkJSEnv := NodeJSEnv().value
   )

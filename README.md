@@ -65,7 +65,7 @@ libraryDependencies += "biz.enef" %%% "slogging-syslog" % "0.6.0"
 ```
 
 slogging 0.6.0 is published for both Scala 2.11.x and Scala 2.12.x,
-Scala.js 0.6.18+, and Scala Native 0.3.2+.
+Scala.js 0.6.19+, and Scala Native 0.3.2+.
 
 ### Logging and Configuration
 #### Add logging statements
