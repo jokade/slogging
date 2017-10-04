@@ -308,6 +308,7 @@ libraryDependencies += "biz.enef" %%% "slogging-syslog" % "VERSION"
 
 ```scala
 LoggerConfig.factory = SyslogLoggerFactory()
+```
 
 License
 -------
