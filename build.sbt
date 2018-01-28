@@ -3,14 +3,14 @@ import sbtcrossproject.{crossProject, CrossType}
 
 lazy val commonSettings = Seq(
   organization := "biz.enef",
-  version := "0.6.0",
-  scalaVersion := "2.11.11",
+  version := "0.6.1-SNAPSHOT",
+  scalaVersion := "2.11.12",
   scalacOptions ++= Seq("-deprecation","-unchecked","-feature","-Xlint")
   //crossScalaVersions := Seq("2.11.11", "2.12.2")
 )
 
 lazy val root = project.in(file(".")).
-  aggregate(sloggingJVM,sloggingJS,sloggingNative,slf4j,winston,http,syslog).
+  aggregate(sloggingJVM,sloggingJS,sloggingNative,slf4j,winston,http,syslog,glib).
   settings(commonSettings:_*).
   //settings(sonatypeSettings: _*).
   settings(
@@ -33,15 +33,15 @@ lazy val slogging = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     name := "slogging",
     libraryDependencies ++= Seq(
       "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-      "com.lihaoyi" %%% "utest" % "0.4.8" % "test"
+      "com.lihaoyi" %%% "utest" % "0.6.3" % "test"
     ),
     testFrameworks += new TestFramework("utest.runner.Framework")
   )
   .jvmSettings(
-    crossScalaVersions := Seq("2.11.11", "2.12.2")
+    crossScalaVersions := Seq("2.11.12", "2.12.2")
   )
   .jsSettings(
-    crossScalaVersions := Seq("2.11.11", "2.12.2")
+    crossScalaVersions := Seq("2.11.12", "2.12.2")
     //preLinkJSEnv := NodeJSEnv().value,
     //postLinkJSEnv := NodeJSEnv().value
   )
@@ -89,6 +89,15 @@ lazy val syslog = project
     publishingSettings :_*)
   .settings(
     name := "slogging-syslog"
+  )
+
+lazy val glib = project
+  .dependsOn(sloggingNative)
+  .enablePlugins(ScalaNativePlugin)
+  .settings(commonSettings ++ publishingSettings :_*)
+  .settings(
+    name := "slogging-glib",
+    nativeLinkingOptions ++= Seq("-lglib-2.0")
   )
 
 lazy val publishingSettings = Seq(

@@ -1,6 +1,6 @@
 slogging
 ========
-[![Build Status](https://travis-ci.org/jokade/slogging.svg?branch=master)](https://travis-ci.org/jokade/slogging)
+<!-- [![Build Status](https://travis-ci.org/jokade/slogging.svg?branch=master)](https://travis-ci.org/jokade/slogging) -->
 
 A simple logging library for Scala, [Scala.js](http://www.scala-js.org), and [Scala Native](http://www.scala-native.org/en/latest/). Slogging is compatible to the [scala-logging](https://github.com/typesafehub/scala-logging) (and slf4j) API, and uses macros to check if logging statements should be executed.
 
@@ -22,6 +22,7 @@ A simple logging library for Scala, [Scala.js](http://www.scala-js.org), and [Sc
   * [Scala Native](#scala-native)
     * [TerminalLogger](#terminallogger)
     * [Syslog](#sysloglogger)
+    * [GLib](#gliblogger)
 
 Getting Started
 ---------------
@@ -31,41 +32,46 @@ Add one of the following lines to your `build.sbt` (depending on your target):
 
 **Scala/JVM** with logging to stdout:
 ```scala
-libraryDependencies += "biz.enef" %% "slogging" % "0.6.0"
+libraryDependencies += "biz.enef" %% "slogging" % "0.6.1"
 ```
 with slf4j:
 ```scala
 libraryDependencies ++= Seq(
-  "biz.enef" %% "slogging-slf4j" % "0.6.0",
+  "biz.enef" %% "slogging-slf4j" % "0.6.1",
   "org.slf4j" % "slf4j-simple" % "1.7.+"  // or another slf4j implementation
 )
 ```
 
 **Scala.js** with logging to console:
 ```scala
-libraryDependencies += "biz.enef" %%% "slogging" % "0.6.0"
+libraryDependencies += "biz.enef" %%% "slogging" % "0.6.1"
 ```
 with [winston](https://www.npmjs.com/package/winston) (Node.js):
 ```scala
-libraryDependencies += "biz.enef" %%% "slogging-winston" % "0.6.0"
+libraryDependencies += "biz.enef" %%% "slogging-winston" % "0.6.1"
 ```
 with remote logging via HTTP POST:
 ```scala
-libraryDependencies += "biz.enef" %%% "slogging-http" % "0.6.0"
+libraryDependencies += "biz.enef" %%% "slogging-http" % "0.6.1"
 ```
 
 **Scala Native** with logging to stderr:
 ```scala
-libraryDependencies += "biz.enef" %%% "slogging" % "0.6.0"
+libraryDependencies += "biz.enef" %%% "slogging" % "0.6.1"
 ```
 
 with logging to `syslogd`:
 ```scala
-libraryDependencies += "biz.enef" %%% "slogging-syslog" % "0.6.0"
+libraryDependencies += "biz.enef" %%% "slogging-syslog" % "0.6.1"
 ```
 
-slogging 0.6.0 is published for both Scala 2.11.x and Scala 2.12.x,
-Scala.js 0.6.19+, and Scala Native 0.3.2+.
+with logging to [GLib](https://developer.gnome.org/glib/stable/glib-Message-Logging.html):
+```scala
+libraryDependencies += "biz.enef" %%% "slogging-glib" % "0.6.1"
+```
+
+slogging 0.6.1 is published for both Scala 2.11.x and Scala 2.12.x,
+Scala.js 0.6.19+, and Scala Native 0.3.6+.
 
 ### Logging and Configuration
 #### Add logging statements
@@ -291,10 +297,13 @@ libraryDependencies += "biz.enef" %%% "slogging" % "VERSION"
 ```scala
 // use default TerminalLogger
 // (error messages are printed in red, warnings in yellow)
-LoggerConfig.factory = WinstonLoggerFactory()
+LoggerConfig.factory = TerminalLoggerFactory()
 
 // print INFO messages in blue
 TerminalLoggerFactory.infoCode = TerminalControlCode.blue
+
+// change the message formatter
+TerminalLoggerFactory.formatter = ...
 ```
 
 #### SyslogLogger
@@ -309,6 +318,26 @@ libraryDependencies += "biz.enef" %%% "slogging-syslog" % "VERSION"
 ```scala
 LoggerConfig.factory = SyslogLoggerFactory()
 ```
+
+#### GLibLogger
+This backend uses [GLib's `g_log()`](https://developer.gnome.org/glib/stable/glib-Message-Logging.html#g-log) to log messages,
+e.g. for use with [scalanative-gtk](https://github.com/jokade/scalanative-gtk).
+
+**Usage:**
+```scala
+// build.sbt
+libraryDependencies += "biz.enef" %%% "slogging-glib" % "VERSION"
+
+nativeLinkingOptions += "-lglib-2.0" // you may need to change this depending on your glib installation
+```
+
+```scala
+LoggerConfig.factory = GLibLoggerFactory()
+
+// optionally change message formatter
+GLibLoggerFactory.formatter = ...
+```
+
 
 License
 -------
