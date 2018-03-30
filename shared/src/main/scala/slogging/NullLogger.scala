@@ -35,5 +35,6 @@ object NullLogger extends UnderlyingLogger {
 
 object NullLoggerFactory extends UnderlyingLoggerFactory {
   override def getUnderlyingLogger(name: String): UnderlyingLogger = NullLogger
+
 }
 

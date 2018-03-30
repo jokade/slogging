@@ -5,12 +5,17 @@ lazy val commonSettings = Seq(
   organization := "biz.enef",
   version := "0.6.2-SNAPSHOT",
   scalaVersion := "2.11.12",
-  scalacOptions ++= Seq("-deprecation","-unchecked","-feature","-Xlint")
+  scalacOptions ++= Seq("-deprecation","-unchecked","-feature","-Xlint"),
+  libraryDependencies ++= Seq(
+  )
   //crossScalaVersions := Seq("2.11.11", "2.12.2")
 )
 
 lazy val root = project.in(file(".")).
-  aggregate(sloggingJVM,sloggingJS,sloggingNative,slf4j,winston,http,syslog,glib).
+  aggregate(
+    sloggingJVM,sloggingJS,sloggingNative,
+    sloggingConfigJVM,sloggingConfigJS,sloggingConfigNative,
+    slf4j,winston,http,syslog,glib).
   settings(commonSettings:_*).
   //settings(sonatypeSettings: _*).
   settings(
@@ -50,6 +55,24 @@ lazy val slogging = crossProject(JSPlatform, JVMPlatform, NativePlatform)
 lazy val sloggingJVM    = slogging.jvm
 lazy val sloggingJS     = slogging.js
 lazy val sloggingNative = slogging.native
+
+
+lazy val sloggingConfig = crossProject(JSPlatform, JVMPlatform, NativePlatform)
+  .crossType(CrossType.Full)
+  .dependsOn(slogging)
+  .settings(commonSettings ++ publishingSettings: _*)
+  .settings(
+    name := "slogging-config",
+    libraryDependencies ++= Seq(
+      "de.surfice" %%% "sconfig" % "0.0.1-SNAPSHOT" % "provided"
+    )
+  )
+
+
+lazy val sloggingConfigJVM    = sloggingConfig.jvm
+lazy val sloggingConfigJS     = sloggingConfig.js
+lazy val sloggingConfigNative = sloggingConfig.native
+
 
 lazy val slf4j = project.
   dependsOn(sloggingJVM).

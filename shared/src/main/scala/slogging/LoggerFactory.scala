@@ -13,7 +13,14 @@ trait UnderlyingLoggerFactory {
 }
 
 
-object LoggerFactory {
+trait LoggerFactory {
+  def getLogger(name: String) : Logger
+}
+
+object LoggerFactory extends LoggerFactory {
+
   def getLogger(name: String) : Logger = Logger( LoggerConfig.factory.getUnderlyingLogger(name) )
+
+
 }
 

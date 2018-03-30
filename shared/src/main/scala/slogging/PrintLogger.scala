@@ -54,5 +54,6 @@ object PrintLoggerFactory extends UnderlyingLoggerFactory {
 
   @inline
   override def getUnderlyingLogger(name: String): UnderlyingLogger = PrintLogger
+
 }
 
