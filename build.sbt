@@ -38,10 +38,10 @@ lazy val slogging = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     testFrameworks += new TestFramework("utest.runner.Framework")
   )
   .jvmSettings(
-    crossScalaVersions := Seq("2.11.12", "2.12.2")
+    crossScalaVersions := Seq("2.11.12", "2.12.5")
   )
   .jsSettings(
-    crossScalaVersions := Seq("2.11.12", "2.12.2")
+    crossScalaVersions := Seq("2.11.12", "2.12.5")
     //preLinkJSEnv := NodeJSEnv().value,
     //postLinkJSEnv := NodeJSEnv().value
   )
