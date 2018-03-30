@@ -76,23 +76,23 @@ abstract class LoggerTemplate extends AbstractUnderlyingLogger {
   @inline private final def log(level: MessageLevel, src: String, msg: String, cause: Option[Throwable]): Unit = logMessage(level, src, msg, cause)
 
   final def error(source: String, message: String): Unit = log(MessageLevel.error, source, message)
-  final def error(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.error, source, message, cause)
+  final def error(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.error, source, message, Option(cause))
   final def error(source: String, message: String, args: Any*): Unit = log(MessageLevel.error, source, message, args:_*)
 
   final def warn(source: String, message: String): Unit = log(MessageLevel.warn, source,message)
-  final def warn(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.warn, source, message, cause)
+  final def warn(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.warn, source, message, Option(cause))
   final def warn(source: String, message: String, args: Any*): Unit = log(MessageLevel.warn, source, message, args:_*)
 
   final def info(source: String, message: String): Unit = log(MessageLevel.info, source,message)
-  final def info(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.info, source, message, cause)
+  final def info(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.info, source, message, Option(cause))
   final def info(source: String, message: String, args: Any*): Unit = log(MessageLevel.info, source, message, args:_*)
 
   final def debug(source: String, message: String): Unit = log(MessageLevel.debug, source,message)
-  final def debug(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.debug, source, message, cause)
+  final def debug(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.debug, source, message, Option(cause))
   final def debug(source: String, message: String, args: Any*): Unit = log(MessageLevel.debug, source, message, args:_*)
 
   final def trace(source: String, message: String): Unit = log(MessageLevel.trace, source,message)
-  final def trace(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.trace, source, message, cause)
+  final def trace(source: String, message: String, cause: Throwable): Unit = log(MessageLevel.trace, source, message, Option(cause))
   final def trace(source: String, message: String, args: Any*): Unit = log(MessageLevel.trace, source, message, args:_*)
 
   /**
