@@ -1,17 +1,27 @@
-// (5) shadow sbt-scalajs' crossProject and CrossType until Scala.js 1.0.0 is released
-import sbtcrossproject.{crossProject, CrossType}
+import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
 lazy val commonSettings = Seq(
   organization := "biz.enef",
   version := "0.6.2-SNAPSHOT",
-  scalaVersion := "2.11.12",
+  scalaVersion := "2.13.1",
   scalacOptions ++= Seq("-deprecation","-unchecked","-feature","-Xlint")
-  //crossScalaVersions := Seq("2.11.11", "2.12.2")
+)
+
+lazy val commonNativeSettings = Seq(
+  unmanagedSourceDirectories in Compile ++= {
+    val sourceDir = (sourceDirectory in Compile).value
+    if(nativeVersion.startsWith("0.3.")) Some(sourceDir / "scala-native-0.3")
+    else if(nativeVersion.startsWith("0.4.")) Some(sourceDir / "scala-native-0.4")
+    else None
+  },
+  scalaVersion := "2.11.12",
+  crossScalaVersions := Seq("2.11.12"),
+  nativeLinkStubs := true
 )
 
 lazy val root = project.in(file(".")).
   aggregate(sloggingJVM,sloggingJS,sloggingNative,slf4j,winston,http,syslog,glib).
-  settings(commonSettings:_*).
+  settings(commonSettings).
   //settings(sonatypeSettings: _*).
   settings(
     name := "slogging",
@@ -27,78 +37,77 @@ lazy val sloggingOsgiSettings = osgiSettings ++ Seq(
 lazy val slogging = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Full)
   .in(file("."))
-  .settings(commonSettings:_*)
-  .settings(publishingSettings:_*)
+  .settings(commonSettings)
+  .settings(publishingSettings)
   .settings(
     name := "slogging",
     libraryDependencies ++= Seq(
       "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-      "com.lihaoyi" %%% "utest" % "0.6.3" % "test"
+      "com.lihaoyi" %%% "utest" % "0.7.4" % Test
     ),
-    testFrameworks += new TestFramework("utest.runner.Framework")
-  )
-  .jvmSettings(
-    crossScalaVersions := Seq("2.11.12", "2.12.2")
+    testFrameworks += new TestFramework("utest.runner.Framework"),
+    crossScalaVersions := Seq("2.12.10", "2.13.1")
   )
   .jsSettings(
-    crossScalaVersions := Seq("2.11.12", "2.12.2")
     //preLinkJSEnv := NodeJSEnv().value,
     //postLinkJSEnv := NodeJSEnv().value
   )
-  .enablePlugins(SbtOsgi).settings(sloggingOsgiSettings:_*)
+  .nativeSettings(commonNativeSettings)
+  .enablePlugins(SbtOsgi).settings(sloggingOsgiSettings)
 
 lazy val sloggingJVM    = slogging.jvm
 lazy val sloggingJS     = slogging.js
 lazy val sloggingNative = slogging.native
 
-lazy val slf4j = project.
-  dependsOn(sloggingJVM).
-  settings(commonSettings:_*).
-  settings(publishingSettings:_*).
-  settings(
+lazy val slf4j = project
+  .dependsOn(sloggingJVM)
+  .settings(commonSettings)
+  .settings(publishingSettings)
+  .settings(
     name := "slogging-slf4j",
     libraryDependencies += "org.slf4j" % "slf4j-api" % "1.7.12"
-  ).
-  enablePlugins(SbtOsgi).settings(sloggingOsgiSettings:_*)
+  )
+  .enablePlugins(SbtOsgi).settings(sloggingOsgiSettings)
 
-lazy val winston = project.
-  dependsOn(sloggingJS).
-  enablePlugins(ScalaJSPlugin).
-  settings(
-    commonSettings ++
-    publishingSettings :_*).
-  settings(
-    name := "slogging-winston"
+lazy val winston = project
+  .dependsOn(sloggingJS)
+  .enablePlugins(ScalaJSPlugin)
+  .settings(
+    name := "slogging-winston",
+    commonSettings,
+    publishingSettings
   )
 
-lazy val http = project.
-  dependsOn(sloggingJS).
-  enablePlugins(ScalaJSPlugin).
-  settings(commonSettings ++
-    publishingSettings:_*).
-  settings(
+lazy val http = project
+  .dependsOn(sloggingJS)
+  .enablePlugins(ScalaJSPlugin)
+  .settings(
     name := "slogging-http",
-    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.1"
+    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "1.0.0",
+    commonSettings,
+    publishingSettings
   )
 
 lazy val syslog = project
   .dependsOn(sloggingNative)
   .enablePlugins(ScalaNativePlugin)
   .settings(
-    commonSettings ++
-    publishingSettings :_*)
-  .settings(
-    name := "slogging-syslog"
+    name := "slogging-syslog",
+    commonSettings,
+    commonNativeSettings,
+    publishingSettings
   )
 
 lazy val glib = project
   .dependsOn(sloggingNative)
-  .enablePlugins(ScalaNativePlugin)
-  .settings(commonSettings ++ publishingSettings :_*)
   .settings(
     name := "slogging-glib",
-    nativeLinkingOptions ++= Seq("-lglib-2.0")
+    nativeLinkingOptions ++= Seq("-lglib-2.0"),
+    commonSettings,
+    commonNativeSettings,
+    publishingSettings
   )
+  .enablePlugins(ScalaNativePlugin)
 
 lazy val publishingSettings = Seq(
   publishMavenStyle := true,
@@ -109,6 +118,7 @@ lazy val publishingSettings = Seq(
     else
       Some("releases"  at nexus + "service/local/staging/deploy/maven2")
   },
+  useGpg := false,
   pomExtra := (
     <url>https://github.com/jokade/slogging</url>
     <licenses>

@@ -10,9 +10,8 @@ import utest._
 object LoggingUtilsTest extends TestSuite {
   import LoggingUtils._
 
-  val tests = TestSuite{
-
-    'formatMessage-{
+  val tests = Tests {
+    test("formatMessage") {
       assert( argsBracketFormat("simple message",Nil) == "simple message" )
       assert( argsBracketFormat("int {}",Seq(42).asInstanceOf[Seq[AnyRef]]) == "int 42" )
       assert( argsBracketFormat("int {}: {}",Seq(42,true).asInstanceOf[Seq[AnyRef]]) == "int 42: true" )

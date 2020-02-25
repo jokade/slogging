@@ -23,7 +23,7 @@ object FilterLogger {
    */
   @inline
   def filter: Filter = _filter
-  def filter_=(f: Filter) = this.synchronized( _filter = f )
+  def filter_=(f: Filter) = this.synchronized { _filter = f }
 }
 
 final class FilterLogger(name: String) extends AbstractUnderlyingLogger {

@@ -41,5 +41,5 @@ object LoggerConfig {
   def level_=(l: LogLevel): Unit = this.synchronized{ _level = l }
   @inline
   def onError: LoggingHook = _errorHook
-  def onError_=(listener: LoggingHook): Unit = this.synchronized( _errorHook = listener )
+  def onError_=(listener: LoggingHook): Unit = this.synchronized { _errorHook = listener }
 }
