@@ -4,7 +4,7 @@ slogging
 
 A simple logging library for Scala, [Scala.js](http://www.scala-js.org), and [Scala Native](http://www.scala-native.org/en/latest/). Slogging is compatible to the [scala-logging](https://github.com/typesafehub/scala-logging) (and slf4j) API, and uses macros to check if logging statements should be executed.
 
-**News:** Version 0.6.1 has been released ([release notes](https://github.com/jokade/slogging/wiki/Release-Notes))!
+**News:** Version 0.6.2 has been released ([release notes](https://github.com/jokade/slogging/wiki/Release-Notes))!
 
 #### Contents:
 * [Getting Started](#getting-started)
@@ -32,46 +32,46 @@ Add one of the following lines to your `build.sbt` (depending on your target):
 
 **Scala/JVM** with logging to stdout:
 ```scala
-libraryDependencies += "biz.enef" %% "slogging" % "0.6.1"
+libraryDependencies += "biz.enef" %% "slogging" % "0.6.2"
 ```
 with slf4j:
 ```scala
 libraryDependencies ++= Seq(
-  "biz.enef" %% "slogging-slf4j" % "0.6.1",
+  "biz.enef" %% "slogging-slf4j" % "0.6.2",
   "org.slf4j" % "slf4j-simple" % "1.7.+"  // or another slf4j implementation
 )
 ```
 
 **Scala.js** with logging to console:
 ```scala
-libraryDependencies += "biz.enef" %%% "slogging" % "0.6.1"
+libraryDependencies += "biz.enef" %%% "slogging" % "0.6.2"
 ```
 with [winston](https://www.npmjs.com/package/winston) (Node.js):
 ```scala
-libraryDependencies += "biz.enef" %%% "slogging-winston" % "0.6.1"
+libraryDependencies += "biz.enef" %%% "slogging-winston" % "0.6.2"
 ```
 with remote logging via HTTP POST:
 ```scala
-libraryDependencies += "biz.enef" %%% "slogging-http" % "0.6.1"
+libraryDependencies += "biz.enef" %%% "slogging-http" % "0.6.2"
 ```
 
 **Scala Native** with logging to stderr:
 ```scala
-libraryDependencies += "biz.enef" %%% "slogging" % "0.6.1"
+libraryDependencies += "biz.enef" %%% "slogging" % "0.6.2"
 ```
 
 with logging to `syslogd`:
 ```scala
-libraryDependencies += "biz.enef" %%% "slogging-syslog" % "0.6.1"
+libraryDependencies += "biz.enef" %%% "slogging-syslog" % "0.6.2"
 ```
 
 with logging to [GLib](https://developer.gnome.org/glib/stable/glib-Message-Logging.html):
 ```scala
-libraryDependencies += "biz.enef" %%% "slogging-glib" % "0.6.1"
+libraryDependencies += "biz.enef" %%% "slogging-glib" % "0.6.2"
 ```
 
-slogging 0.6.1 is published for both Scala 2.11.x and Scala 2.12.x,
-Scala.js 0.6.19+, and Scala Native 0.3.6+.
+slogging 0.6.2 is published for both Scala 2.12.x and Scala 2.13.x,
+Scala.js 1.0, and Scala Native 0.3.9 / 0.4.0-M2.
 
 ### Logging and Configuration
 #### Add logging statements

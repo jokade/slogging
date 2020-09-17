@@ -1,6 +1,6 @@
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
-version in ThisBuild := "0.6.2-SNAPSHOT"
+version in ThisBuild := "0.6.2"
 
 lazy val commonSettings = Seq(
   organization := "biz.enef",
@@ -138,6 +138,8 @@ lazy val scriptedTests = project
     scriptedLaunchOpts := { scriptedLaunchOpts.value ++
       Seq("-Xmx1024M", "-Dlib.version=" + version.value)
     },
+    publish := {},
+    publishLocal := {},
     scriptedBufferLog := false
    )
 
