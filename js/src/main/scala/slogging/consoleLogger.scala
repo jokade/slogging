@@ -21,7 +21,7 @@ object ConsoleLogger extends AbstractUnderlyingLogger {
    */
   @inline
   def printLoggerName : Boolean = _printLoggerName
-  def printLoggerName_=(f: Boolean) = this.synchronized( _printLoggerName = f )
+  def printLoggerName_=(f: Boolean): Unit = this.synchronized { _printLoggerName = f }
 
   private val console = global.console
 
