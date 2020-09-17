@@ -14,7 +14,7 @@ lazy val commonSettings = Seq(
 lazy val root = project.in(file(".")).
   aggregate(
     sloggingJVM,sloggingJS,sloggingNative,
-    sloggingConfigJVM,sloggingConfigJS,sloggingConfigNative,
+    //sloggingConfigJVM,sloggingConfigJS,sloggingConfigNative,
     slf4j,winston,http,syslog,glib).
   settings(commonSettings:_*).
   //settings(sonatypeSettings: _*).
@@ -56,7 +56,7 @@ lazy val sloggingJVM    = slogging.jvm
 lazy val sloggingJS     = slogging.js
 lazy val sloggingNative = slogging.native
 
-
+/*
 lazy val sloggingConfig = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Full)
   .dependsOn(slogging)
@@ -72,7 +72,7 @@ lazy val sloggingConfig = crossProject(JSPlatform, JVMPlatform, NativePlatform)
 lazy val sloggingConfigJVM    = sloggingConfig.jvm
 lazy val sloggingConfigJS     = sloggingConfig.js
 lazy val sloggingConfigNative = sloggingConfig.native
-
+*/
 
 lazy val slf4j = project.
   dependsOn(sloggingJVM).
