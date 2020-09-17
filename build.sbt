@@ -1,8 +1,10 @@
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
+version in ThisBuild := "0.6.2-SNAPSHOT"
+
 lazy val commonSettings = Seq(
   organization := "biz.enef",
-  version := "0.6.2-SNAPSHOT",
+//  version := "0.6.2-SNAPSHOT",
   scalaVersion := "2.13.1",
   scalacOptions ++= Seq("-deprecation","-unchecked","-feature","-Xlint")
 )
@@ -129,6 +131,15 @@ lazy val glib = project
     publishingSettings
   )
   .enablePlugins(ScalaNativePlugin)
+
+lazy val scriptedTests = project
+  .enablePlugins(SbtPlugin)
+  .settings(
+    scriptedLaunchOpts := { scriptedLaunchOpts.value ++
+      Seq("-Xmx1024M", "-Dlib.version=" + version.value)
+    },
+    scriptedBufferLog := false
+   )
 
 lazy val publishingSettings = Seq(
   publishMavenStyle := true,
